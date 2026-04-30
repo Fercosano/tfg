@@ -1,0 +1,281 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio - Hello World! Party{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #1f2833 0%, #0b0c10 100%);
+            padding: 5rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102,252,241,0.05) 0%, transparent 60%);
+            animation: pulse 4s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        .level-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--gamer-surface);
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 252, 241, 0.2) !important;
+            border-color: var(--gamer-primary);
+        }
+        .level-header {
+            background: linear-gradient(45deg, #0b0c10, #1f2833);
+            color: white;
+            padding: 2rem;
+            border-bottom: 1px solid var(--gamer-secondary);
+        }
+        .lesson-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .lesson-item {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .lesson-item:hover {
+            background: rgba(102, 252, 241, 0.05);
+        }
+        .lesson-item:last-child {
+            border-bottom: none;
+        }
+        .lesson-icon {
+            background-color: rgba(102, 252, 241, 0.1);
+            color: var(--gamer-primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 1px solid rgba(102, 252, 241, 0.3);
+        }
+        .badge-difficulty {
+            font-size: 0.85rem;
+            padding: 0.5em 1em;
+            border-radius: 0.5rem;
+            background-color: transparent !important;
+            border: 1px solid #f39c12;
+            color: #f39c12 !important;
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.2);
+        }
+        .btn-neon-solid {
+            background-color: var(--gamer-primary);
+            color: #000;
+            border: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
+        }
+        .btn-neon-solid:hover {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0 0 25px rgba(102, 252, 241, 0.8);
+            transform: scale(1.05);
+        }
+        .xp-bar-container {
+            background: #0b0c10;
+            height: 10px;
+            border-radius: 5px;
+            width: 200px;
+            overflow: hidden;
+            border: 1px solid rgba(102, 252, 241, 0.3);
+        }
+        .xp-bar-fill {
+            background: var(--gamer-primary);
+            height: 100%;
+            width: 0%;
+            box-shadow: 0 0 10px var(--gamer-primary);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    {% if app.user %}
+        {# Vista para usuario logueado: Dashboard Gamer #}
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 bg-dark p-4 rounded-3 border" style="border-color: rgba(102,252,241,0.2) !important;">
+            <div class="d-flex align-items-center mb-3 mb-md-0">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ app.user.email }}" alt="Avatar" width="80" height="80" class="rounded-circle me-4 border border-info border-3 p-1">
+                <div>
+                    <h1 class="h3 fw-bold text-white mb-1 d-flex align-items-center">
+                        Jugador: <span style="color: var(--gamer-primary); margin-left: 8px;">{{ app.user.username ?: app.user.email | split('@')[0] }}</span>
+                        <button class="btn btn-sm btn-outline-info ms-3 rounded-circle" style="padding: 2px 8px;" data-bs-toggle="modal" data-bs-target="#changeNameModal" title="Cambiar Nombre de Personaje"><i class="bi bi-pencil-square"></i></button>
+                    </h1>
+                    <p class="text-secondary mb-0"><i class="bi bi-shield-check me-1"></i> Rango: Aprendiz del Búnker</p>
+                </div>
+            </div>
+            <div class="text-md-end text-start">
+                <div class="d-flex justify-content-md-end align-items-center mb-2">
+                    <span class="text-white me-2 fw-bold">Nivel de Autorización</span>
+                    <span class="badge bg-transparent border border-info text-info">{{ app.user.xp }} XP</span>
+                </div>
+                <div class="xp-bar-container">
+                    <div class="xp-bar-fill" style="width: 10%;"></div>
+                </div>
+            </div>
+        </div>
+
+        {% if course %}
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <h3 class="mb-4 fw-bold text-white"><i class="bi bi-geo-alt text-info me-2"></i>Misión Actual</h3>
+                    
+                    <div class="card level-card shadow-lg">
+                        <div class="level-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-transparent border border-light text-light mb-2 px-3 py-1 rounded-pill">Mundo 1</span>
+                                <h2 class="h3 mb-0 fw-bold" style="color: var(--gamer-primary);">{{ course.title }}</h2>
+                            </div>
+                            <span class="badge badge-difficulty shadow-sm">
+                                <i class="bi bi-star-fill me-1"></i> {{ course.difficulty }}
+                            </span>
+                        </div>
+                        
+                        <div class="card-body p-0">
+                            <div class="p-4 border-bottom" style="background-color: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.05) !important;">
+                                <p class="lead text-light mb-0" style="font-size: 1.1rem;"><i class="bi bi-info-square me-2 text-info"></i>{{ course.description }}</p>
+                            </div>
+                            
+                            <h5 class="px-4 pt-4 pb-2 text-secondary fw-bold mb-0 text-uppercase" style="letter-spacing: 1px;">Puntos de Control (Lecciones)</h5>
+                            <ul class="lesson-list">
+                                {% for lesson in course.lessons %}
+                                    <li class="lesson-item">
+                                        <div class="lesson-icon shadow-sm"><i class="bi bi-code-slash"></i></div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 text-white fw-bold">{{ lesson.title }}</h6>
+                                            <small class="text-secondary text-truncate d-block" style="max-width: 80%;">
+                                                {{ lesson.content|striptags|slice(0, 80) ~ '...' }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" disabled><i class="bi bi-lock-fill me-1"></i>Bloqueado</button>
+                                        </div>
+                                    </li>
+                                {% else %}
+                                    <li class="lesson-item text-muted">Aún no hay misiones disponibles. El Padre está preparándolas.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="card-footer p-4 border-top text-center" style="background-color: var(--gamer-bg); border-color: rgba(255,255,255,0.05) !important;">
+                            <button class="btn btn-neon-solid btn-lg rounded-pill px-5 shadow" onclick="alert('¡Iniciando enlace con la terminal del Búnker...')">
+                                <i class="bi bi-play-fill me-1"></i> Iniciar Misión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert shadow-sm rounded-3 p-4 text-center" style="background-color: var(--gamer-surface); border: 1px dashed var(--gamer-secondary);">
+                <i class="bi bi-exclamation-triangle display-4 d-block mb-3" style="color: var(--gamer-primary);"></i>
+                <h4 class="alert-heading fw-bold text-white">Sistemas Inactivos</h4>
+                <p class="text-secondary">Tu padre aún no ha habilitado las terminales de mantenimiento. Mantente a la espera.</p>
+            </div>
+        {% endif %}
+
+    {% else %}
+        {# Vista para usuario NO logueado (Landing de bienvenida gamer) #}
+        <div class="hero-section text-center position-relative z-1">
+            <div class="mb-4 d-inline-block p-3 rounded-circle" style="background: rgba(102, 252, 241, 0.1); border: 1px solid var(--gamer-primary); box-shadow: var(--neon-shadow);">
+                <i class="bi bi-controller" style="font-size: 3rem; color: var(--gamer-primary);"></i>
+            </div>
+            <h1 class="display-3 fw-bold text-white mb-4" style="text-shadow: 0 0 20px rgba(102, 252, 241, 0.5);">Hello World! <span style="color: var(--gamer-primary);">Party</span></h1>
+            <p class="lead text-secondary mb-5 mx-auto" style="max-width: 700px; font-size: 1.2rem;">
+                Entra a la simulación. Domina la lógica de programación superando retos y subiendo de nivel. Tu aventura para convertirte en desarrollador empieza aquí.
+            </p>
+            
+            <div class="d-grid gap-4 d-sm-flex justify-content-sm-center">
+                <a href="{{ path('app_register') }}" class="btn btn-neon-solid btn-lg px-5 py-3 rounded-pill" style="transform: scale(1.05);">
+                    <i class="bi bi-lightning-charge-fill me-2"></i>Crear Personaje
+                </a>
+            </div>
+        </div>
+        
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="col">
+                <div class="card h-100 p-4 border-0 rounded-4" style="background-color: var(--gamer-surface); transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                    <div class="mb-3">
+                        <i class="bi bi-terminal-fill" style="font-size: 2.5rem; color: var(--gamer-primary);"></i>
+                    </div>
+                    <h2 class="fw-bold text-white h4">Consola Interactiva</h2>
+                    <p class="text-secondary">Escribe código real en tu navegador. Compila y ejecuta instantáneamente para derrotar los algoritmos.</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 p-4 border-0 rounded-4" style="background-color: var(--gamer-surface); transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                    <div class="mb-3">
+                        <i class="bi bi-bar-chart-line-fill" style="font-size: 2.5rem; color: var(--gamer-primary);"></i>
+                    </div>
+                    <h2 class="fw-bold text-white h4">Sube de Nivel</h2>
+                    <p class="text-secondary">Gana puntos de experiencia (XP) completando misiones y desbloquea mundos más difíciles.</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 p-4 border-0 rounded-4" style="background-color: var(--gamer-surface); transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                    <div class="mb-3">
+                        <i class="bi bi-trophy-fill" style="font-size: 2.5rem; color: var(--gamer-primary);"></i>
+                    </div>
+                    <h2 class="fw-bold text-white h4">Logros Épicos</h2>
+                    <p class="text-secondary">Consigue medallas raras por optimización de código y código limpio. Demuestra tu poder.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if app.user %}
+    <!-- Modal Cambiar Nombre -->
+    <div class="modal fade" id="changeNameModal" tabindex="-1" aria-labelledby="changeNameModalLabel" aria-hidden="true" data-bs-theme="dark">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: var(--gamer-surface); border: 1px solid var(--gamer-primary);">
+          <form action="{{ path('app_change_username') }}" method="POST">
+              <div class="modal-header border-0">
+                <h5 class="modal-title text-white" id="changeNameModalLabel"><i class="bi bi-person-badge text-info me-2"></i>Cambiar Nombre de Personaje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                    <label for="usernameInput" class="form-label text-secondary">Nuevo Nombre</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="usernameInput" name="username" value="{{ app.user.username }}" required maxlength="255" placeholder="Escribe tu nuevo nombre">
+                </div>
+              </div>
+              <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-neon-solid rounded-pill px-4">Guardar</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

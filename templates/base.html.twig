@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Hello World! Party{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>👾</text></svg>">
+        
+        <!-- Bootstrap 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+        
+        <style>
+            :root {
+                --gamer-bg: #0b0c10;
+                --gamer-surface: #1f2833;
+                --gamer-primary: #66fcf1;
+                --gamer-secondary: #45a29e;
+                --gamer-text: #c5c6c7;
+                --neon-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+            }
+            body {
+                background-color: var(--gamer-bg);
+                color: var(--gamer-text);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            .navbar-gamer {
+                background-color: rgba(11, 12, 16, 0.95) !important;
+                border-bottom: 1px solid var(--gamer-secondary);
+                backdrop-filter: blur(10px);
+            }
+            .navbar-brand {
+                color: var(--gamer-primary) !important;
+                font-weight: 800;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                text-shadow: var(--neon-shadow);
+            }
+            .nav-link {
+                color: var(--gamer-text) !important;
+                transition: color 0.3s;
+            }
+            .nav-link:hover {
+                color: var(--gamer-primary) !important;
+                text-shadow: var(--neon-shadow);
+            }
+            .btn-neon {
+                background-color: transparent;
+                border: 1px solid var(--gamer-primary);
+                color: var(--gamer-primary);
+                transition: all 0.3s ease;
+                box-shadow: 0 0 5px rgba(102, 252, 241, 0.2);
+            }
+            .btn-neon:hover {
+                background-color: var(--gamer-primary);
+                color: #000;
+                box-shadow: 0 0 15px rgba(102, 252, 241, 0.6);
+            }
+        </style>
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-gamer py-3 mb-4 sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="{{ path('app_home') }}">
+                    <i class="bi bi-controller me-2"></i>Hello World! Party
+                </a>
+                
+                {% if not app.user %}
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto align-items-center">
+                            <li class="nav-item mt-3 mt-lg-0">
+                                <a class="btn btn-outline-info rounded-pill px-4" href="{{ path('app_login') }}">Login</a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    {# Si está logueado, solo mostramos el perfil/logout discretamente para estar "en el juego" #}
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-dark dropdown-toggle d-flex align-items-center bg-transparent border-0" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ app.user.email }}" alt="Avatar" width="35" height="35" class="rounded-circle me-2 border border-info">
+                                <span class="d-none d-sm-inline" style="color: var(--gamer-primary);">{{ app.user.username ?: app.user.email | split('@')[0] }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userMenu">
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Mi Perfil</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Ajustes</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Desconectar</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="container pb-5">
+            {% block body %}{% endblock %}
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

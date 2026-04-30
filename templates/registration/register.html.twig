@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrarse - Plataforma de Aprendizaje{% endblock %}
+
+{% block body %}
+<div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h2 class="mb-0">Crear una Cuenta</h2>
+            </div>
+            <div class="card-body p-4">
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+
+                {{ form_errors(registrationForm) }}
+
+                {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.email, 'Correo Electrónico', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'ejemplo@correo.com'}}) }}
+                        <div class="text-danger mt-1">{{ form_errors(registrationForm.email) }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.plainPassword, 'Contraseña', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mínimo 6 caracteres'}}) }}
+                        <div class="text-danger mt-1">{{ form_errors(registrationForm.plainPassword) }}</div>
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(registrationForm.agreeTerms, 'Acepto los términos y condiciones', {'label_attr': {'class': 'form-check-label'}}) }}
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Registrarse</button>
+                    </div>
+                {{ form_end(registrationForm) }}
+            </div>
+            <div class="card-footer text-center py-3 bg-light">
+                ¿Ya tienes una cuenta? <a href="{{ path('app_login') }}" class="text-primary text-decoration-none">Inicia sesión aquí</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
