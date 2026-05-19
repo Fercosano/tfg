@@ -23,6 +23,9 @@ class Lesson
     private ?string $content = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $lore = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $initialCode = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -135,6 +138,17 @@ class Lesson
             }
         }
 
+        return $this;
+    }
+
+    public function getLore(): ?string
+    {
+        return $this->lore;
+    }
+
+    public function setLore(?string $lore): static
+    {
+        $this->lore = $lore;
         return $this;
     }
 

@@ -1,0 +1,297 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jugando: {{ lesson.title }} - Hello World! Party{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Evitar scroll en la pantalla principal del juego */
+            background-color: #0b0c10;
+        }
+        .game-container {
+            display: flex;
+            height: calc(100vh - 70px); /* Restamos la altura aproximada del navbar */
+            border-top: 1px solid rgba(102, 252, 241, 0.2);
+        }
+        
+        /* Panel Izquierdo: Historia */
+        .lore-panel {
+            width: 35%;
+            background: linear-gradient(180deg, #1f2833 0%, #0b0c10 100%);
+            padding: 2rem;
+            overflow-y: auto;
+            border-right: 2px solid rgba(102, 252, 241, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        .lore-header {
+            border-bottom: 1px dashed var(--gamer-primary);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .typewriter-text {
+            color: #c5c6c7;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        /* Panel Derecho: Editor y Consola */
+        .code-panel {
+            width: 65%;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1e1e; /* Fondo oscuro estándar para IDEs */
+        }
+        .editor-container {
+            height: 70%;
+            position: relative;
+        }
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            font-size: 16px;
+        }
+        
+        /* Consola Inferior */
+        .console-container {
+            height: 30%;
+            background-color: #000;
+            border-top: 2px solid #333;
+            display: flex;
+            flex-direction: column;
+        }
+        .console-header {
+            background-color: #1a1a1a;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        .console-output {
+            padding: 1rem;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .console-log { color: #fff; margin-bottom: 5px; }
+        .console-error { color: #ff5555; margin-bottom: 5px; }
+        .console-success { color: #50fa7b; margin-bottom: 5px; font-weight: bold; }
+        
+        .btn-neon-run {
+            background-color: transparent;
+            color: var(--gamer-primary);
+            border: 1px solid var(--gamer-primary);
+            box-shadow: 0 0 10px rgba(102,252,241,0.2);
+            transition: all 0.3s;
+        }
+        .btn-neon-run:hover {
+            background-color: var(--gamer-primary);
+            color: #000;
+            box-shadow: 0 0 20px rgba(102,252,241,0.8);
+        }
+        
+        /* Ocultar el pie de página de la plantilla base en el modo juego */
+        footer { display: none !important; }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="game-container">
+    
+    <!-- LORE PANEL (Izquierda) -->
+    <div class="lore-panel">
+        <div class="mb-3">
+            <a href="{{ path('app_home') }}" class="text-secondary text-decoration-none"><i class="bi bi-arrow-left me-1"></i> Abortar Misión</a>
+        </div>
+        
+        <div class="lore-header">
+            <span class="badge bg-transparent border border-info text-info mb-2"><i class="bi bi-geo-alt"></i> Nivel en curso</span>
+            <h2 class="text-white fw-bold mb-0" style="color: var(--gamer-primary) !important;">{{ lesson.title }}</h2>
+        </div>
+        
+        <div class="typewriter-text" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1rem;">
+            {# Mostramos el contenido técnico (Pistas de Froggy) #}
+            {{ lesson.content|raw }}
+        </div>
+    </div>
+    
+    <!-- CODE PANEL (Derecha) -->
+    <div class="code-panel">
+        
+        <!-- Editor de Código -->
+        <div class="editor-container">
+            <div id="editor">{{ lesson.initialCode }}</div>
+        </div>
+        
+        <!-- Consola -->
+        <div class="console-container">
+            <div class="console-header">
+                <span class="text-secondary fw-bold"><i class="bi bi-terminal me-2"></i>Terminal del Sistema</span>
+                <button id="runCodeBtn" class="btn btn-sm btn-neon-run rounded-pill px-4 fw-bold"><i class="bi bi-play-fill"></i> Ejecutar Código</button>
+            </div>
+            <div class="console-output" id="consoleOutput">
+                <div class="text-secondary">Esperando órdenes...</div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Modal Victoria -->
+<div class="modal fade" id="victoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4 border-0" style="background-color: var(--gamer-surface); box-shadow: 0 0 30px rgba(102,252,241,0.5);">
+      <div class="modal-body">
+        <i class="bi bi-trophy-fill display-1 text-warning mb-3" style="filter: drop-shadow(0 0 10px rgba(255,193,7,0.8));"></i>
+        <h2 class="text-white fw-bold mb-3">¡Misión Cumplida!</h2>
+        <p class="text-secondary fs-5">Has restaurado la terminal con éxito.</p>
+        <div class="d-inline-block px-4 py-2 rounded-pill border border-warning text-warning fw-bold fs-4 mb-4">
+            + <span id="xpGained">50</span> XP
+        </div>
+        <div>
+            <a href="{{ path('app_home') }}" class="btn btn-lg w-100 fw-bold" style="background-color: var(--gamer-primary); color: #000;">Continuar Viaje <i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Cargar Ace Editor vía CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/theme-dracula.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/mode-javascript.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Inicializar Ace Editor
+            var editor = ace.edit("editor");
+            editor.setTheme("ace/theme/dracula");
+            editor.session.setMode("ace/mode/javascript");
+            editor.setOptions({
+                fontSize: "16px",
+                showPrintMargin: false,
+                wrap: true,
+            });
+
+            // 2. Motor de Evaluación y Consola
+            const consoleOutput = document.getElementById('consoleOutput');
+            const runBtn = document.getElementById('runCodeBtn');
+            const expectedOutput = "{{ lesson.expectedOutput|escape('js') }}";
+            const submitUrl = "{{ path('app_lesson_submit', {'id': lesson.id}) }}";
+
+            // Función para añadir mensajes a nuestra falsa consola HTML
+            function printToConsole(message, type = 'log') {
+                const div = document.createElement('div');
+                div.className = `console-${type}`;
+                // Convertimos objetos a string si es necesario
+                if (typeof message === 'object') {
+                    div.textContent = JSON.stringify(message);
+                } else {
+                    div.textContent = message;
+                }
+                consoleOutput.appendChild(div);
+                // Hacer scroll abajo
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                return div.textContent;
+            }
+
+            runBtn.addEventListener('click', function() {
+                // Limpiar consola
+                consoleOutput.innerHTML = '';
+                const code = editor.getValue();
+                
+                // Variable para almacenar todo lo que el usuario imprima
+                let userOutput = [];
+
+                // Secuestrar console.log
+                const originalLog = console.log;
+                console.log = function(...args) {
+                    const msg = args.join(' ');
+                    printToConsole(msg, 'log');
+                    userOutput.push(msg);
+                    originalLog.apply(console, args);
+                };
+                
+                // Secuestrar console.error
+                const originalError = console.error;
+                console.error = function(...args) {
+                    const msg = args.join(' ');
+                    printToConsole(msg, 'error');
+                    originalError.apply(console, args);
+                };
+
+                try {
+                    // Ejecutar el código del usuario de forma aislada
+                    // Usamos new Function para evaluar
+                    const executeCode = new Function(code);
+                    executeCode();
+                    
+                    // Comprobar la victoria
+                    const finalOutputString = userOutput.join('\n').trim();
+                    if (finalOutputString === expectedOutput.trim()) {
+                        printToConsole('--- VALIDACIÓN EXITOSA ---', 'success');
+                        triggerVictory(code);
+                    } else {
+                        printToConsole('--- VALIDACIÓN FALLIDA ---', 'error');
+                        printToConsole(`Se esperaba: "${expectedOutput}"`, 'error');
+                        printToConsole(`Se recibió: "${finalOutputString}"`, 'error');
+                        printToConsole('El Padre dice: ¡Revisa tu código, soldado! Algo no encaja.', 'log');
+                    }
+                } catch (e) {
+                    printToConsole(e.toString(), 'error');
+                    printToConsole('El Padre dice: Tienes un error de sintaxis grave. El Búnker no compila.', 'log');
+                } finally {
+                    // Restaurar la consola original
+                    console.log = originalLog;
+                    console.error = originalError;
+                }
+            });
+
+            function triggerVictory(codeSubmitted) {
+                // Deshabilitar botón para evitar múltiples envíos
+                runBtn.disabled = true;
+                runBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...';
+
+                // Llamada AJAX a Symfony
+                fetch(submitUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        code: codeSubmitted,
+                        success: true
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Mostrar Modal de Victoria
+                        const modal = new bootstrap.Modal(document.getElementById('victoryModal'));
+                        document.getElementById('xpGained').innerText = data.xp_earned;
+                        modal.show();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error guardando progreso:', error);
+                    printToConsole('Error de red guardando tu progreso.', 'error');
+                    runBtn.disabled = false;
+                    runBtn.innerHTML = '<i class="bi bi-play-fill"></i> Ejecutar Código';
+                });
+            }
+        });
+    </script>
+{% endblock %}

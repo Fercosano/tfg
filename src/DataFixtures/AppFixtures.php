@@ -42,7 +42,8 @@ class AppFixtures extends Fixture
         // Lección 1: Hola Mundo
         $lesson1 = new Lesson();
         $lesson1->setTitle('1. Tu primer Hola Mundo');
-        $lesson1->setContent('En programación, lo primero que aprendemos es a saludar. Utiliza la función console.log("Hola Mundo") para imprimir este mensaje clásico.');
+        $lesson1->setLore('<p><strong>El Búnker está a oscuras.</strong></p><p>Hijo, los generadores principales del sector B han colapsado. El sistema de soporte vital de nuestro refugio está cayendo drásticamente. Necesito que restaures la consola de comandos principal.</p><p>Para ello, la IA del Búnker necesita un saludo de reconocimiento para saber que sigues con vida.</p>');
+        $lesson1->setContent('<strong>Misión Técnica:</strong><br/>- Usa el comando <code>console.log()</code>.<br/>- Escribe dentro el saludo clásico: <code>"Hola Mundo"</code>.<br/>- Recuerda que las cadenas de texto deben ir entre comillas.');
         $lesson1->setInitialCode('// Escribe tu código aquí debajo' . "\n\n");
         $lesson1->setExpectedOutput('Hola Mundo');
         $lesson1->setCourse($course);

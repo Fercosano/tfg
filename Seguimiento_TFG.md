@@ -171,3 +171,17 @@ Pensando en usuarios sin experiencia previa, se implementará un sistema inspira
 - **Fill-in-the-Blanks (Código Parcial):** En los primeros niveles, el editor no está vacío. El jugador se encuentra una plantilla con la estructura hecha (Ej: `let ______ = "Hola Mundo";`) y solo debe rellenar los huecos clave.
 - **Manual de Supervivencia Visual:** Acompañando a la consola, habrá un panel donde el Padre resalta visualmente la sintaxis exacta necesaria.
 - **Asistencia Activa:** Si el jugador se queda atascado (sin teclear) durante unos segundos, el sistema interviene dándole una pista más explícita.
+
+---
+
+## Fase 6: Sistema Narrativo Cinematográfico y "Clean Editor"
+
+Para emular la excelencia de plataformas referentes (como *Flexbox Froggy* o plataformas modernas de gamificación de código), se ha refinado el flujo del minijuego separando estrictamente la historia de la programación pura:
+
+1. **La Cinemática Inicial:** Antes de programar, el usuario aterriza en una pantalla de introducción oscura y con efectos retro (`/lesson/{id}/story`). Aquí recibe el **Lore** (una transmisión del Padre poniéndole en contexto de emergencia). Esto genera inmersión absoluta y reduce la carga cognitiva de leer largos textos en la pantalla de código.
+2. **Entidad Bifurcada (BD):** Se modificó la arquitectura añadiendo un campo dedicado (`$lore`) a la tabla `Lesson` a través de Doctrine, separado del `$content` (que ahora sirve exclusivamente para almacenar pistas y trucos del lenguaje de programación).
+3. **El "Clean Editor":** La pantalla de programación (`/lesson/{id}/play`) ha sido aliviada de ruido visual. Ahora alberga, a pantalla completa, el Ace Editor a la derecha, su terminal debajo, y un panel limpio y directo a la izquierda reservado únicamente para las **Reglas del Nivel** y la documentación técnica necesaria para superarlo.
+4. **Backend Potenciado:** El *EasyAdmin* ha sido actualizado para proporcionar dos campos de texto enriquecidos (`TextEditorField`), permitiendo al profesor diseñar la narrativa visual y las instrucciones técnicas cómodamente, con soporte para resaltado de código en las ayudas (`<code>`).
+
+---
+*Documento actualizado con la integración final de la Cinemática Previa y la separación técnica/narrativa del juego.*

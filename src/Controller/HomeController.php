@@ -19,13 +19,22 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/home', name: 'app_home')]
-    public function index(CourseRepository $courseRepository): Response
+    public function index(CourseRepository $courseRepository, \App\Repository\UserProgressRepository $progressRepo): Response
     {
         // Obtenemos el primer curso disponible para mostrar la introducción al nivel 1
         $firstCourse = $courseRepository->findOneBy([], ['id' => 'ASC']);
+        
+        $completedLessons = [];
+        if ($this->getUser()) {
+            $progresses = $progressRepo->findBy(['user' => $this->getUser(), 'isCompleted' => true]);
+            foreach ($progresses as $p) {
+                $completedLessons[] = $p->getLesson()->getId();
+            }
+        }
 
         return $this->render('home/index.html.twig', [
             'course' => $firstCourse,
+            'completedLessons' => $completedLessons,
         ]);
     }
 

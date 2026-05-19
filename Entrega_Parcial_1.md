@@ -1,6 +1,6 @@
 # Ejercicio de Entrega Parcial TFG: Módulo de Autenticación
 
-**Autor:** [Tu Nombre / Manuel Prieto Macias]
+**Autor:** Fernando
 **Proyecto:** Hello World! Party (Plataforma de Aprendizaje de Lógica de Programación)
 
 ---
