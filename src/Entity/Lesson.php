@@ -137,4 +137,9 @@ class Lesson
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->title ?? 'Lección sin nombre';
+    }
 }

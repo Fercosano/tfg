@@ -113,11 +113,12 @@ Para lograr un funcionamiento por "lecciones prácticas", hemos estructurado la 
 
 Para finalizar la plataforma, estas son las tareas estructuradas que vamos a ir completando:
 
-### 1. Inserción de Datos Base (Fixtures)
-Crearemos un conjunto de datos inicial (seed) utilizando `DoctrineFixturesBundle`. Esto generará automáticamente cursos de prueba (ej. "Lógica Básica en JavaScript") y varias lecciones con código predefinido (`initialCode`) y resultados esperados (`expectedOutput`). De este modo, la base de datos nunca estará vacía al probar la aplicación.
+### 1. Inserción de Datos Base (Fixtures) - [COMPLETADO]
+Se ha configurado `DoctrineFixturesBundle`. Se han creado automáticamente cursos de prueba (ej. "Fundamentos de JavaScript") y varias lecciones con código predefinido (`initialCode`) y resultados esperados (`expectedOutput`). Además, se inyectan dinámicamente un usuario administrador y un alumno de pruebas para garantizar la portabilidad del entorno en cualquier ordenador (portátil de presentación) sin necesidad de copias de seguridad de la BD física.
 
-### 2. Frontend del Curso (Listado)
-Se desarrollará un controlador `CourseController` con una vista en la que el usuario podrá ver todos los cursos disponibles. Si está autenticado, podrá acceder a ellos.
+### 2. Frontend del Curso (Listado) - [COMPLETADO]
+Se ha rediseñado la vista principal para mostrar el "Mundo" o Curso activo, calculando dinámicamente el progreso del jugador, su Avatar autogenerado y el diseño inmersivo post-apocalíptico.
+
 
 ### 3. Entorno de Ejecución (El Editor Interactivo)
 El corazón de la plataforma estilo "Coddy.tech":
@@ -132,11 +133,22 @@ El corazón de la plataforma estilo "Coddy.tech":
 
 Para diferenciar verdaderamente este TFG y transformarlo en una experiencia inmersiva, se ha rediseñado la plataforma integrando una capa narrativa y gamificada de alto nivel. Estos son los puntos clave a exponer en la presentación:
 
-### 1. Transformación Visual a "CodeQuest" (Estilo Gamer)
+### 1. Transformación Visual a "Hello World! Party" (Estilo Gamer)
 Se ha abandonado el diseño tradicional de formulario web en favor de una **estética "Dark / Gamer"**. 
 - **Inmersión Total:** Al iniciar sesión, desaparecen los menús clásicos. El usuario entra a un "Dashboard" que simula un panel de control avanzado.
 - **HUD (Head-Up Display):** Integración de un Avatar, Rango del jugador (ej. Novato) y una barra visual de Puntos de Experiencia (XP) que otorga feedback continuo sobre el progreso.
+- **Botón de Comando:** Si el usuario tiene el rango de Administrador Supremo (`ROLE_ADMIN`), se le habilita una interfaz de anulación (un botón para saltar directamente al panel de EasyAdmin del Backend).
 - **Diseño Neón:** Uso de contrastes fuertes (fondos oscuros `#0b0c10` con acentos cian/neón `#66fcf1`) para crear una atmósfera tecnológica atractiva y profesional.
+
+---
+
+## Fase 5: Panel de Administración (Backend)
+
+Para evitar la gestión de datos puramente a nivel de código y dotar al proyecto de una perspectiva docente:
+- **EasyAdmin Bundle:** Se ha instalado y configurado un panel de administración profesional autogenerado en la ruta `/admin` (estrictamente protegida por cortafuegos de Symfony para `ROLE_ADMIN`).
+- **Gestión Docente:** Desde este panel, el profesorado puede crear nuevos Cursos, escribir las instrucciones (Lore) de las Lecciones, definir el código inicial y el código esperado sin necesidad de tocar la base de datos.
+- **Auditoría de Alumnos:** A través del CRUD de `UserProgress`, el profesorado puede inspeccionar el código exacto que los estudiantes envían para superar los niveles, previniendo trampas.
+
 
 ### 2. Narrativa Post-Apocalíptica (Inspiración "Fallout")
 Se ha diseñado un **Storytelling** para dar contexto a los problemas lógicos, elevando el enganche (engagement) del estudiante:

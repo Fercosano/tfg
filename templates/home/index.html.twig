@@ -140,9 +140,14 @@
                     <span class="text-white me-2 fw-bold">Nivel de Autorización</span>
                     <span class="badge bg-transparent border border-info text-info">{{ app.user.xp }} XP</span>
                 </div>
-                <div class="xp-bar-container">
+                <div class="xp-bar-container mb-3">
                     <div class="xp-bar-fill" style="width: 10%;"></div>
                 </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                <div class="d-flex justify-content-md-end">
+                    <a href="{{ path('admin') }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 shadow-sm" style="border-color: rgba(255, 193, 7, 0.5);"><i class="bi bi-gear-fill me-1"></i> Ir al Backend (SuperAdmin)</a>
+                </div>
+                {% endif %}
             </div>
         </div>
 

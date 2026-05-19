@@ -9,8 +9,29 @@ use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(
+        private \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $hasher
+    ) {}
+
     public function load(ObjectManager $manager): void
     {
+        // 1. Crear Usuarios de Prueba
+        $admin = new \App\Entity\User();
+        $admin->setEmail('admin@codequest.com');
+        $admin->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+        $admin->setUsername('Admin Supremo');
+        $admin->setPassword($this->hasher->hashPassword($admin, 'admin'));
+        $admin->setXp(9999);
+        $manager->persist($admin);
+
+        $student = new \App\Entity\User();
+        $student->setEmail('alumno@codequest.com');
+        $student->setRoles(['ROLE_USER']);
+        $student->setUsername('Novato42');
+        $student->setPassword($this->hasher->hashPassword($student, '123456'));
+        $student->setXp(150);
+        $manager->persist($student);
+
         // Crear Curso de JavaScript
         $course = new Course();
         $course->setTitle('Fundamentos de JavaScript');
