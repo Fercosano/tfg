@@ -143,6 +143,11 @@
         </div>
         
     </div>
+    <div id="game-data" style="display:none;"
+         data-expected-output="{{ lesson.expectedOutput|escape('html_attr') }}"
+         data-submit-url="{{ path('app_lesson_submit', {'id': lesson.id}) }}">
+    </div>
+
 </div>
 
 <!-- Modal Victoria -->
@@ -168,10 +173,11 @@
 
 {% block javascripts %}
     {{ parent() }}
+    
     <!-- Cargar Ace Editor vía CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/ace.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/theme-dracula.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/mode-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/theme-dracula.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-javascript.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -188,8 +194,9 @@
             // 2. Motor de Evaluación y Consola
             const consoleOutput = document.getElementById('consoleOutput');
             const runBtn = document.getElementById('runCodeBtn');
-            const expectedOutput = "{{ lesson.expectedOutput|escape('js') }}";
-            const submitUrl = "{{ path('app_lesson_submit', {'id': lesson.id}) }}";
+            const gameData = document.getElementById('game-data');
+            const expectedOutput = gameData.dataset.expectedOutput;
+            const submitUrl = gameData.dataset.submitUrl;
 
             // Función para añadir mensajes a nuestra falsa consola HTML
             function printToConsole(message, type = 'log') {
