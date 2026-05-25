@@ -45,7 +45,7 @@ class AppFixtures extends Fixture
 
         $lesson1_1 = new Lesson();
         $lesson1_1->setTitle('1.1. Reinicio del Terminal');
-        $lesson1_1->setLore('<p><strong>Señal de Radio:</strong></p><p>Hijo, los generadores principales han colapsado y el sistema de soporte vital está cayendo. Necesito que restaures la consola principal.</p><p>La IA del Búnker requiere que le hables usando el comando de impresión clásico para saber que sigues con vida.</p>');
+        $lesson1_1->setLore('<p><strong>Señal de Radio:</strong></p><p>Hijo, estoy muy cansado y ya no tecleo como antes. Los generadores han colapsado. Es el momento de que inicies tu entrenamiento como Arquitecto del Refugio para que yo pueda jubilarme de una vez.</p><p>La IA requiere que le hables usando el comando de impresión clásico para saber que estás al mando.</p>');
         $lesson1_1->setContent('<strong>Manual Técnico:</strong><br/>- Usa el comando <code>console.log()</code> para imprimir texto.<br/>- Escribe exactamente: <code>"Hola Bunker"</code>.<br/>- Recuerda que el texto puro (strings) debe ir entre comillas.');
         $lesson1_1->setInitialCode('// Inicia la terminal saludando a la IA' . "\n\n");
         $lesson1_1->setExpectedOutput('Hola Bunker');
@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
 
         $lesson1_2 = new Lesson();
         $lesson1_2->setTitle('1.2. Inventario de Sobrevivientes');
-        $lesson1_2->setLore('<p><strong>Señal de Radio:</strong></p><p>Bien hecho. El terminal ha despertado. Ahora necesitamos saber a cuánta gente tenemos que alimentar. Usa una "variable" para almacenar ese número en la memoria de la máquina.</p>');
+        $lesson1_2->setLore('<p><strong>Señal de Radio:</strong></p><p>Bien hecho. Tienes talento, igual que tu viejo. El terminal ha despertado. Ahora necesitamos saber a cuánta gente tenemos que alimentar. Usa una "variable" para almacenar ese número.</p>');
         $lesson1_2->setContent('<strong>Manual Técnico:</strong><br/>- Usa <code>let</code> para declarar una variable llamada <code>sobrevivientes</code>.<br/>- Asígnale el valor numérico <code>42</code>.<br/>- Imprime la variable usando <code>console.log(sobrevivientes)</code>.');
         $lesson1_2->setInitialCode("let sobrevivientes = \n\n");
         $lesson1_2->setExpectedOutput('42');
@@ -63,7 +63,7 @@ class AppFixtures extends Fixture
 
         $lesson1_3 = new Lesson();
         $lesson1_3->setTitle('1.3. Cálculo de Raciones');
-        $lesson1_3->setLore('<p><strong>Señal de Radio:</strong></p><p>Tenemos a los sobrevivientes, pero las raciones son escasas. Tenemos cajas de latas de comida y botellas de agua. Haz que la terminal calcule el total de suministros combinados.</p>');
+        $lesson1_3->setLore('<p><strong>Señal de Radio:</strong></p><p>Si vas a heredar mi puesto, debes saber hacer el inventario para que yo no tenga que hacerlo. Tenemos latas de comida y botellas de agua. Haz que la terminal calcule el total combinándolas.</p>');
         $lesson1_3->setContent('<strong>Manual Técnico:</strong><br/>- Crea una variable <code>comida</code> con valor 15.<br/>- Crea una variable <code>agua</code> con valor 10.<br/>- Imprime la suma matemática de ambas variables.');
         $lesson1_3->setInitialCode("let comida = 15;\nlet agua = 10;\n\n// Imprime la suma de los suministros\n");
         $lesson1_3->setExpectedOutput('25');
@@ -90,7 +90,7 @@ class AppFixtures extends Fixture
 
         $lesson2_2 = new Lesson();
         $lesson2_2->setTitle('2.2. Distribuidor de Energía');
-        $lesson2_2->setLore('<p><strong>Señal de Radio:</strong></p><p>Hijo, el generador no da para todo. Si la energía cae por debajo de 50, enciende el motor auxiliar. Si no, mantén el modo ahorro.</p>');
+        $lesson2_2->setLore('<p><strong>Señal de Radio:</strong></p><p>Hijo, llevar las riendas del búnker agota muchísimo. Te toca tomar decisiones por mí. Si la energía cae por debajo de 50, enciende el motor auxiliar. Si no, mantén el modo ahorro. Confío en ti.</p>');
         $lesson2_2->setContent('<strong>Manual Técnico:</strong><br/>- La variable <code>energia</code> vale 40.<br/>- Si es menor que 50 (<code>< 50</code>), imprime "Motor Auxiliar".<br/>- De lo contrario (<code>else</code>), imprime "Modo Ahorro".');
         $lesson2_2->setInitialCode("let energia = 40;\n\n// Completa la lógica\nif (energia < 50) {\n  \n} else {\n  \n}");
         $lesson2_2->setExpectedOutput('Motor Auxiliar');
@@ -135,7 +135,7 @@ class AppFixtures extends Fixture
 
         $lesson3_3 = new Lesson();
         $lesson3_3->setTitle('3.3. Protocolo de Reparación');
-        $lesson3_3->setLore('<p><strong>Señal de Radio:</strong></p><p>Hijo, estoy muy orgulloso. Eres oficialmente un Arquitecto del Refugio. Ahora encapsula tu conocimiento en una función reutilizable para que la IA la ejecute cuando no estemos.</p>');
+        $lesson3_3->setLore('<p><strong>Señal de Radio:</strong></p><p>Hijo, estoy muy orgulloso. Eres oficialmente un Arquitecto del Refugio, con mi mismo rango. Ya puedo irme a descansar de verdad. Crea una función final para la IA y toma el control. El Búnker 42 es todo tuyo.</p>');
         $lesson3_3->setContent('<strong>Manual Técnico:</strong><br/>- Crea una función llamada <code>reparar</code>.<br/>- Haz que la función retorne (<code>return</code>) el texto "Sistema Operativo".<br/>- Finalmente, imprime el resultado ejecutando <code>console.log(reparar());</code>.');
         $lesson3_3->setInitialCode("function reparar() {\n  // Retorna el string pedido\n}\n\n");
         $lesson3_3->setExpectedOutput("Sistema Operativo");
