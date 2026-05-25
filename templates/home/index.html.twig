@@ -79,8 +79,8 @@
                                             <div class="bg-[#66fcf1]/10 text-[#66fcf1] w-12 h-12 rounded-xl flex items-center justify-center mr-5 border border-[#66fcf1]/30 shadow-sm text-xl"><i class="bi bi-code-slash"></i></div>
                                             <div class="flex-grow">
                                                 <h6 class="mb-1 text-white font-bold text-lg">{{ lesson.title }}</h6>
-                                                <small class="text-gray-400 block truncate w-[200px] md:w-[400px]">
-                                                    {{ lesson.content|striptags|slice(0, 80) ~ '...' }}
+                                                <small class="text-gray-400 block mt-1">
+                                                    {{ lesson.content|striptags }}
                                                 </small>
                                             </div>
                                             <div>
