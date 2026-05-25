@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Perfil - Hello World! Party{% endblock %}
+
+{% block body %}
+<div class="flex justify-center items-center min-h-[60vh]">
+    <div class="w-full max-w-lg">
+        <div class="card-gamer p-8 relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#66fcf1] rounded-full mix-blend-screen filter blur-[80px] opacity-20"></div>
+            
+            <div class="text-center mb-8 relative z-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1f2833] border-2 border-[#66fcf1] shadow-[0_0_15px_rgba(102,252,241,0.5)] mb-4">
+                    <i class="bi bi-person-bounding-box text-3xl text-[#66fcf1]"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-white tracking-widest uppercase text-shadow-[0_0_10px_rgba(102,252,241,0.5)]">Tu Personaje</h2>
+                <p class="text-gray-400 text-sm mt-2">Personaliza tu identidad en el Búnker</p>
+            </div>
+
+            {{ form_start(form, {'attr': {'class': 'relative z-10'}}) }}
+                
+                <div class="mb-5">
+                    {{ form_label(form.username, null, {'label_attr': {'class': 'label-gamer'}}) }}
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-tag-fill text-gray-500"></i>
+                        </div>
+                        {{ form_widget(form.username, {'attr': {'class': 'input-gamer pl-10'}}) }}
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1 text-right">Tu nombre visible en la plataforma</div>
+                </div>
+
+                <div class="mb-8">
+                    {{ form_label(form.avatar, null, {'label_attr': {'class': 'label-gamer'}}) }}
+                    {{ form_widget(form.avatar) }}
+                    <div class="text-xs text-gray-500 mt-1 text-right">Si lo dejas vacío, se usará tu avatar original</div>
+                </div>
+                
+                <!-- Previsualización -->
+                <div class="mb-8 flex flex-col items-center p-4 bg-[#0b0c10] border border-[#45a29e]/30 rounded-xl">
+                    <span class="text-gray-400 text-xs mb-3 font-bold uppercase tracking-widest">Vista Previa Actual</span>
+                    {% set currentAvatar = app.user.avatar ? app.user.avatar : app.user.email %}
+                    {% set avatarType = app.user.avatar and 'bottts' not in app.user.avatar and 'avataaars' not in app.user.avatar ? 'avataaars' : '' %}
+                    <img id="avatarPreview" src="https://api.dicebear.com/7.x/{{ app.user.avatar|default('avataaars')|split('-')[0]|default('avataaars') }}/svg?seed={{ app.user.avatar ?: app.user.email }}" alt="Preview" class="w-24 h-24 rounded-full border-2 border-[#66fcf1] p-1 shadow-[0_0_15px_rgba(102,252,241,0.3)]">
+                </div>
+
+                <div class="mt-8 flex gap-4">
+                    <a href="{{ path('app_home') }}" class="w-1/3 bg-[#1f2833] text-white border border-gray-600 font-bold uppercase tracking-widest py-3 rounded-lg hover:bg-gray-700 transition-all text-center flex justify-center items-center">
+                        Cancelar
+                    </a>
+                    <button class="w-2/3 bg-[#66fcf1] text-black font-bold uppercase tracking-widest py-3 rounded-lg hover:bg-white hover:scale-[1.02] transition-all duration-300 shadow-[0_0_15px_rgba(102,252,241,0.4)] hover:shadow-[0_0_25px_rgba(102,252,241,0.8)] flex justify-center items-center" type="submit">
+                        <i class="bi bi-save-fill mr-2"></i> Guardar Cambios
+                    </button>
+                </div>
+            {{ form_end(form) }}
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    // Pequeño script para actualizar la previsualización del avatar cuando cambien el select
+    document.addEventListener('DOMContentLoaded', function() {
+        const select = document.getElementById('profile_avatar');
+        const preview = document.getElementById('avatarPreview');
+        const userEmail = '{{ app.user.email }}';
+        
+        if(select && preview) {
+            select.addEventListener('change', function() {
+                const val = this.value;
+                if(!val) {
+                    preview.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userEmail}`;
+                } else {
+                    const type = val.includes('bottts') ? 'bottts' : 'avataaars';
+                    preview.src = `https://api.dicebear.com/7.x/${type}/svg?seed=${val}`;
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

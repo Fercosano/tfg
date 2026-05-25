@@ -15,14 +15,15 @@ class UserProgressCrudController extends AbstractCrudController
         return UserProgress::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            \EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField::new('user', 'Usuario'),
+            \EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField::new('lesson', 'Reto/Lección'),
+            \EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField::new('isCompleted', '¿Completado?'),
+            \EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField::new('codeSubmitted', 'Código Enviado')
+                ->setLanguage('javascript')
+                ->hideOnIndex(), // Lo ocultamos en la lista para que no ocupe mucho espacio
         ];
     }
-    */
 }

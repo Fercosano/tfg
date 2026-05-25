@@ -32,7 +32,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(LessonCrudController::class, 'Lecciones (Retos)', 'fas fa-code');
         
         yield MenuItem::section('Usuarios y Progreso');
-        yield MenuItem::linkTo(UserCrudController::class, 'Estudiantes', 'fas fa-users');
+        yield MenuItem::linkTo(UserCrudController::class, 'Usuarios', 'fas fa-users');
         yield MenuItem::linkTo(UserProgressCrudController::class, 'Progreso', 'fas fa-chart-line');
         
         yield MenuItem::section('Volver');

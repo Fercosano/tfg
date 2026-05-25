@@ -9,6 +9,43 @@
         <!-- Tailwind CSS via CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
         
+        <!-- Script de configuración Tailwind para CDN -->
+        <style type="text/tailwindcss">
+            @layer base {
+                :root {
+                    --gamer-bg: #0b0c10;
+                    --gamer-surface: #1f2833;
+                    --gamer-primary: #66fcf1;
+                    --gamer-secondary: #45a29e;
+                    --gamer-text: #c5c6c7;
+                    --neon-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+                }
+            }
+            @layer components {
+                .btn-neon {
+                    @apply bg-transparent border border-[#66fcf1] text-[#66fcf1] px-6 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-300;
+                    box-shadow: 0 0 5px rgba(102, 252, 241, 0.2);
+                }
+                .btn-neon:hover {
+                    @apply bg-[#66fcf1] text-black;
+                    box-shadow: 0 0 15px rgba(102, 252, 241, 0.6);
+                }
+                .card-gamer {
+                    @apply bg-[#1f2833] border border-[#45a29e] border-opacity-30 rounded-xl overflow-hidden shadow-lg transition-transform duration-300;
+                }
+                .card-gamer:hover {
+                    @apply transform -translate-y-2 border-[#66fcf1];
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 15px rgba(102, 252, 241, 0.2);
+                }
+                .input-gamer {
+                    @apply w-full bg-[#0b0c10] border border-[#45a29e] text-[#c5c6c7] rounded-lg px-4 py-2 focus:outline-none focus:border-[#66fcf1] focus:ring-1 focus:ring-[#66fcf1] transition-colors;
+                }
+                .label-gamer {
+                    @apply block text-[#66fcf1] text-sm font-bold mb-2 tracking-wide;
+                }
+            }
+        </style>
+        
         <!-- Bootstrap Icons (Permitido para iconos) -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
         
@@ -39,7 +76,8 @@
                                 <a href="{{ path('app_login') }}" class="btn-neon">Login</a>
                             {% else %}
                                 <div class="flex items-center space-x-3 bg-black/30 rounded-full px-4 py-2 border border-[#45a29e]/50">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ app.user.email }}" alt="Avatar" class="h-8 w-8 rounded-full border border-[#66fcf1]">
+                                    {% set navAvatarType = app.user.avatar and 'bottts' in app.user.avatar ? 'bottts' : 'avataaars' %}
+                                    <img src="https://api.dicebear.com/7.x/{{ navAvatarType }}/svg?seed={{ app.user.avatar ?: app.user.email }}" alt="Avatar" class="h-8 w-8 rounded-full border border-[#66fcf1] bg-[#1f2833]">
                                     <span class="text-[#66fcf1] font-bold">{{ app.user.username ?: app.user.email | split('@')[0] }}</span>
                                     <span class="text-gray-500 mx-2">|</span>
                                     <a href="{{ path('app_logout') }}" class="text-red-500 hover:text-red-400 font-bold transition-colors">

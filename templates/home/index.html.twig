@@ -9,11 +9,12 @@
         {# Vista para usuario logueado: Dashboard Gamer #}
         <div class="flex flex-col md:flex-row justify-between md:items-center mb-12 bg-[#0b0c10] p-6 rounded-2xl border border-[#45a29e]/30 shadow-[0_0_15px_rgba(69,162,158,0.1)]">
             <div class="flex items-center mb-6 md:mb-0">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ app.user.email }}" alt="Avatar" class="w-20 h-20 rounded-full mr-6 border-2 border-[#66fcf1] p-1 shadow-[0_0_10px_rgba(102,252,241,0.5)]">
+                {% set avatarType = app.user.avatar and 'bottts' in app.user.avatar ? 'bottts' : 'avataaars' %}
+                <img src="https://api.dicebear.com/7.x/{{ avatarType }}/svg?seed={{ app.user.avatar ?: app.user.email }}" alt="Avatar" class="w-20 h-20 rounded-full mr-6 border-2 border-[#66fcf1] p-1 shadow-[0_0_10px_rgba(102,252,241,0.5)] bg-[#1f2833]">
                 <div>
                     <h1 class="text-2xl font-bold text-white mb-2 flex items-center">
-                        Jugador: <span class="text-[#66fcf1] ml-2">{{ app.user.username ?: app.user.email | split('@')[0] }}</span>
-                        <!-- Eliminar modal de bootstrap, usaremos un simple prompt o enlace si hay tiempo -->
+                        Jugador: <span class="text-[#66fcf1] mx-2">{{ app.user.username ?: app.user.email | split('@')[0] }}</span>
+                        <a href="{{ path('app_profile') }}" class="text-xs bg-[#1f2833] border border-[#45a29e] hover:bg-[#45a29e] text-white px-3 py-1 rounded-full transition-colors"><i class="bi bi-pencil-fill"></i></a>
                     </h1>
                     <p class="text-gray-400 mb-0 flex items-center"><i class="bi bi-shield-check mr-2 text-[#45a29e]"></i> Rango: {{ rankName ?? 'Aprendiz del Búnker' }}</p>
                 </div>
