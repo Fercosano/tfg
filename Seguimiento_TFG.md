@@ -218,3 +218,31 @@ Para elevar la calidad del TFG al nivel de un producto comercial, se ha implemen
 
 ---
 *Documento actualizado con la implementación final de las mecánicas de gamificación, progresión por rangos y la capa final de pulido visual y auditivo.*
+
+---
+
+## Preparación para la Defensa (Guion de Presentación)
+
+Para la exposición del jueves, debes estructurar tu discurso destacando los siguientes hitos técnicos y de diseño que aportan gran valor al proyecto:
+
+### 1. La Evolución de la Arquitectura (De Local a Contenedores)
+- **El Problema:** Al inicio, el proyecto dependía de un entorno local (PHP instalado en tu máquina) y SQLite, lo cual podía generar problemas si el tribunal quería probarlo en otra máquina con otra versión.
+- **La Solución (Lo que tienes que decir):** *"Para garantizar que el proyecto se ejecute de forma idéntica en cualquier entorno y sea escalable, he implementado una arquitectura basada en contenedores con **Docker y Docker Compose**. El sistema levanta tres contenedores interconectados: un servidor web Nginx, un procesador PHP-FPM y una base de datos MySQL 8 dedicada. Además, he automatizado el despliegue con un script de entrada (`entrypoint.sh`) que instala las dependencias de Composer y recrea el esquema de la base de datos automáticamente al arrancar."*
+
+### 2. El Rediseño Frontend: De Bootstrap a Tailwind CSS
+- **El Problema:** Bootstrap proporcionaba componentes rápidos, pero el diseño se veía genérico y no encajaba con la estética inmersiva de un juego post-apocalíptico.
+- **La Solución (Lo que tienes que decir):** *"He migrado íntegramente la interfaz del framework clásico Bootstrap hacia **Tailwind CSS**. Esto me ha permitido diseñar una interfaz 'Gamer' 100% personalizada. Utilizando clases de utilidad y un archivo CSS centralizado, he implementado efectos complejos como sombras de neón (Glow), difuminados de fondo (Backdrop Blur) y layouts adaptativos sin cargar pesados scripts de terceros, mejorando tanto el rendimiento de carga como la inmersión narrativa."*
+
+### 3. La Narrativa Integrada ("El Padre" y el Backend)
+- **Lo que tienes que decir sobre la historia:** *"La narrativa no está escrita en duro en el código HTML. He diseñado la base de datos para que la historia (el Lore del Padre) y las pistas de cada nivel se inyecten dinámicamente desde el backend (vía Fixtures o el Panel de Administración). De esta manera, si como profesor quiero añadir un nuevo nivel o cambiar lo que dice 'El Padre', solo tengo que entrar al panel de control de Symfony (EasyAdmin) sin tocar una sola línea de código."*
+
+### 4. Las Mecánicas de Retención (Game Feel)
+- Menciona cómo has programado en JavaScript puro (Vanilla JS) los efectos del juego sin depender de librerías externas.
+- Habla del **Web Audio API** para los pitidos de la máquina de escribir.
+- Destaca el secuestro de la consola (`console.log` modificado) para evaluar el código de forma segura en el navegador, y el sistema de **Glitch CSS** cuando el usuario falla 3 veces.
+
+### 5. Demostración Recomendada en Vivo
+1. Muestra la pantalla de Login y habla del rediseño en Tailwind.
+2. Entra al juego y deja que se reproduzca la cinemática del Padre (`story.html.twig`) para que escuchen el sonido y vean el efecto de máquina de escribir.
+3. En el nivel de código, escribe algo mal a propósito 3 veces para enseñar el efecto Glitch rojo y el sistema de pistas inteligentes del Padre.
+4. Escribe el código perfecto, muestra cómo lanza confeti o la "Estrella de Oro", y cómo el sistema Backend registra el avance y otorga 75 XP.
