@@ -101,7 +101,7 @@ class AppFixtures extends Fixture
         $lesson2_3->setTitle('2.3. Acceso Restringido');
         $lesson2_3->setLore('<p><strong>Panel de Seguridad:</strong></p><p>Para entrar al búnker VIP, no basta con tener la llave, además hay que tener la huella digital autorizada. Requerimos doble confirmación.</p>');
         $lesson2_3->setContent('<strong>Manual Técnico:</strong><br/>- Usa el operador lógico AND (<code>&&</code>) para comprobar múltiples condiciones.<br/>- Si <code>tieneLlave</code> es true Y <code>tieneHuella</code> es true, imprime "Acceso Permitido".');
-        $lesson2_3->setInitialCode("let tieneLlave = true;\nlet tieneHuella = true;\n\nif (tieneLlave && tieneHuella) {\n  console.log(\"Acceso Permitido\");\n}\n");
+        $lesson2_3->setInitialCode("let tieneLlave = true;\nlet tieneHuella = true;\n\n// Escribe la condición usando &&\nif ( ) {\n  \n}\n");
         $lesson2_3->setExpectedOutput('Acceso Permitido');
         $lesson2_3->setCourse($course2);
         $manager->persist($lesson2_3);
