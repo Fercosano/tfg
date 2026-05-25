@@ -239,35 +239,64 @@
     </div>
     
     <div class="p-6 overflow-y-auto flex-grow font-mono text-sm">
-        <p class="text-gray-400 mb-8 italic">"Hijo, si estás leyendo esto, es que te has atascado. Aquí tienes mis viejos apuntes de programación del viejo mundo. Úsalos sabiamente." - El Padre</p>
+        <p class="text-gray-400 mb-8 italic">"Hijo, si estás leyendo esto, es que te has atascado o es tu primer día frente a un teclado de verdad. La programación no es magia, es darle instrucciones extremadamente precisas a una máquina muy tonta. Aquí tienes mis viejos apuntes de supervivencia. Úsalos sabiamente." - El Padre</p>
         
         <div class="mb-8">
-            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">1. Mostrar mensajes (Imprimir)</h6>
-            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800 mb-1">console.log("Texto");</code>
-            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800">console.log(variable);</code>
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">1. Hablar con la Máquina (Imprimir)</h6>
+            <p class="text-gray-400 text-xs mb-2">La máquina es ciega y muda por defecto. Si quieres que te diga algo por la Terminal del Sistema, tienes que usar <code>console.log()</code>.</p>
+            <ul class="text-gray-500 text-xs mb-2 list-disc pl-4">
+                <li>Si quieres imprimir texto literal, <strong>debes usar comillas</strong> <code>" "</code> o <code>' '</code>.</li>
+                <li>Si quieres imprimir el valor de una variable o un número, <strong>no uses comillas</strong>.</li>
+            </ul>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800 mb-1">console.log("Hola Búnker"); // Imprime: Hola Búnker</code>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800">console.log(42); // Imprime el número: 42</code>
         </div>
         
         <div class="mb-8">
-            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">2. Variables (Guardar datos)</h6>
-            <p class="text-gray-500 text-xs mb-2">Nunca uses 'var', está obsoleto.</p>
-            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800 mb-1">let nombre = "Búnker";</code>
-            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800">const MAX_ENERGIA = 100;</code>
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">2. Cajas de Almacenamiento (Variables)</h6>
+            <p class="text-gray-400 text-xs mb-2">Imagina las variables como cajas con una etiqueta donde guardamos información para usarla después.</p>
+            <ul class="text-gray-500 text-xs mb-2 list-disc pl-4">
+                <li><code>let</code>: Usa esto para crear una caja cuyo contenido <strong>puede cambiar</strong> en el futuro.</li>
+                <li><code>const</code>: Usa esto para crear una caja sellada. Su contenido <strong>nunca puede cambiar</strong>.</li>
+            </ul>
+            <p class="text-[#ff5555] text-xs mb-2 font-bold"><i class="bi bi-exclamation-triangle"></i> IMPORTANTE: Nunca uses la palabra antigua 'var', provoca fugas de memoria en el reactor.</p>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800 mb-1">let sobrevivientes = 15; // Podemos sumar más luego</code>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800">const NIVEL_MAXIMO = 100; // Esto es fijo</code>
+        </div>
+
+        <div class="mb-8">
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">3. Matemáticas Básicas</h6>
+            <p class="text-gray-400 text-xs mb-2">Puedes usar la terminal como una calculadora gigante para recalibrar los sistemas usando operadores: <code>+</code> (suma), <code>-</code> (resta), <code>*</code> (multiplicación), <code>/</code> (división).</p>
+            <code class="text-gray-300 block bg-black/50 p-3 rounded border border-gray-800 whitespace-pre">let energiaBase = 20;
+let multiplicador = 2;
+let total = energiaBase * multiplicador; 
+console.log(total); // Imprime: 40</code>
         </div>
         
         <div class="mb-8">
-            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">3. Condicionales (Decisiones)</h6>
-            <code class="text-gray-300 block bg-black/50 p-3 rounded border border-gray-800 whitespace-pre">if (energia < 50) {
-  console.log("Peligro");
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">4. Tomar Decisiones (Condicionales)</h6>
+            <p class="text-gray-400 text-xs mb-2">Sirven para bifurcar el camino. <strong>"SI pasa esto, haz esto; SINO, haz lo otro".</strong></p>
+            <p class="text-gray-500 text-xs mb-2">Comparamos usando: <code>===</code> (igual a), <code>!==</code> (distinto de), <code>&gt;</code> (mayor que), <code>&lt;</code> (menor que).</p>
+            <code class="text-gray-300 block bg-black/50 p-3 rounded border border-gray-800 whitespace-pre">let temperatura = 80;
+
+if (temperatura > 50) {
+  // Entra aquí si es verdadero
+  console.log("¡Peligro de sobrecalentamiento!");
 } else {
-  console.log("Seguro");
+  // Entra aquí si es falso
+  console.log("Sistemas estables");
 }</code>
         </div>
         
         <div class="mb-8">
-            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">4. Bucles (Repeticiones)</h6>
-            <code class="text-gray-300 block bg-black/50 p-3 rounded border border-gray-800 whitespace-pre">// Repetir 3 veces
-for(let i=1; i<=3; i++) {
-  console.log(i);
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">5. Automatizar Tareas (Bucles FOR)</h6>
+            <p class="text-gray-400 text-xs mb-2">Los humanos nos cansamos de repetir cosas, las máquinas no. Si tienes que reiniciar 5 generadores, no escribas la instrucción 5 veces, usa un bucle <code>for</code>.</p>
+            <p class="text-gray-500 text-xs mb-2">El bucle tiene 3 partes: <strong>(1)</strong> Dónde empezamos, <strong>(2)</strong> Cuándo nos detenemos, <strong>(3)</strong> De cuánto en cuánto avanzamos.</p>
+            <code class="text-gray-300 block bg-black/50 p-3 rounded border border-gray-800 whitespace-pre">// (1) Empezamos en i = 1
+// (2) Repetimos MIENTRAS i sea menor o igual a 3
+// (3) En cada vuelta sumamos 1 a i (i++)
+for (let i = 1; i <= 3; i++) {
+  console.log("Reiniciando generador " + i);
 }</code>
         </div>
     </div>
