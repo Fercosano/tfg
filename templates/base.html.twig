@@ -66,22 +66,22 @@
                 <div class="flex items-center justify-between h-16">
                     <div class="flex-shrink-0">
                         <a href="{{ path('app_home') }}" class="text-[#66fcf1] font-extrabold tracking-widest uppercase flex items-center drop-shadow-[0_0_10px_rgba(102,252,241,0.5)]">
-                            <i class="bi bi-controller text-2xl mr-2"></i> Hello World! Party
+                            <i class="bi bi-controller text-2xl sm:mr-2"></i> <span class="hidden sm:inline">Hello World! Party</span>
                         </a>
                     </div>
                     
-                    <div class="hidden md:block">
-                        <div class="ml-4 flex items-center md:ml-6">
+                    <div>
+                        <div class="ml-2 sm:ml-4 flex items-center md:ml-6">
                             {% if not app.user %}
-                                <a href="{{ path('app_login') }}" class="btn-neon">Login</a>
+                                <a href="{{ path('app_login') }}" class="btn-neon text-sm sm:text-base px-4 py-1.5 sm:px-6 sm:py-2">Login</a>
                             {% else %}
-                                <div class="flex items-center space-x-3 bg-black/30 rounded-full px-4 py-2 border border-[#45a29e]/50">
+                                <div class="flex items-center space-x-2 sm:space-x-3 bg-black/30 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 border border-[#45a29e]/50">
                                     {% set navAvatarType = app.user.avatar and 'bottts' in app.user.avatar ? 'bottts' : 'avataaars' %}
-                                    <img src="https://api.dicebear.com/7.x/{{ navAvatarType }}/svg?seed={{ app.user.avatar ?: app.user.email }}" alt="Avatar" class="h-8 w-8 rounded-full border border-[#66fcf1] bg-[#1f2833]">
-                                    <span class="text-[#66fcf1] font-bold">{{ app.user.username ?: app.user.email | split('@')[0] }}</span>
-                                    <span class="text-gray-500 mx-2">|</span>
-                                    <a href="{{ path('app_logout') }}" class="text-red-500 hover:text-red-400 font-bold transition-colors">
-                                        <i class="bi bi-box-arrow-right"></i> Salir
+                                    <img src="https://api.dicebear.com/7.x/{{ navAvatarType }}/svg?seed={{ app.user.avatar ?: app.user.email }}" alt="Avatar" class="h-6 w-6 sm:h-8 sm:w-8 rounded-full border border-[#66fcf1] bg-[#1f2833]">
+                                    <span class="text-[#66fcf1] font-bold text-sm sm:text-base hidden sm:inline">{{ app.user.username ?: app.user.email | split('@')[0] }}</span>
+                                    <span class="text-gray-500 mx-1 sm:mx-2 hidden sm:inline">|</span>
+                                    <a href="{{ path('app_logout') }}" class="text-red-500 hover:text-red-400 font-bold transition-colors text-sm sm:text-base flex items-center">
+                                        <i class="bi bi-box-arrow-right"></i> <span class="ml-1 hidden sm:inline">Salir</span>
                                     </a>
                                 </div>
                             {% endif %}
