@@ -60,14 +60,17 @@
                             </div>
                             
                             <div class="p-0">
-                                <div class="p-6 border-b border-[#45a29e]/20 bg-black/20">
-                                    <p class="text-gray-300 text-lg flex items-start"><i class="bi bi-info-square mr-3 text-[#66fcf1] mt-1"></i>{{ course.description }}</p>
+                                <div class="p-4 sm:p-6 border-b border-[#45a29e]/20 bg-black/20">
+                                    <div class="text-gray-300 text-sm sm:text-lg flex items-start">
+                                        <i class="bi bi-info-square mr-3 text-[#66fcf1] mt-1 flex-shrink-0"></i>
+                                        <span class="flex-1 min-w-0 break-words">{{ course.description }}</span>
+                                    </div>
                                     {% if isLocked %}
-                                        <div class="mt-4 bg-red-900/20 border border-red-500 text-red-400 p-4 rounded-lg flex items-center">
-                                            <i class="bi bi-shield-lock-fill mr-3 text-xl"></i>
-                                            <div>
-                                                <strong class="block">Nivel de Autorización Insuficiente</strong>
-                                                Necesitas reparar {{ requiredLessons }} terminales en total para acceder a este sector. Llevas {{ completedLessons|length }}.
+                                        <div class="mt-4 bg-red-900/20 border border-red-500 text-red-400 p-3 sm:p-4 rounded-lg flex items-start sm:items-center">
+                                            <i class="bi bi-shield-lock-fill mr-3 text-xl flex-shrink-0 mt-1 sm:mt-0"></i>
+                                            <div class="flex-1 min-w-0">
+                                                <strong class="block truncate sm:whitespace-normal mb-1">Nivel de Autorización Insuficiente</strong>
+                                                <p class="text-xs sm:text-sm m-0 leading-tight">Necesitas reparar {{ requiredLessons }} terminales en total para acceder a este sector. Llevas {{ completedLessons|length }}.</p>
                                             </div>
                                         </div>
                                     {% endif %}
@@ -110,12 +113,15 @@
                     {% endfor %}
                     
                     <!-- Salón de la Fama (Leaderboard) -->
-                    <div class="mt-12 bg-[#0b0c10] border border-yellow-500/50 rounded-2xl p-6 shadow-[0_0_15px_rgba(234,179,8,0.15)]">
-                        <h3 class="mb-6 font-bold text-yellow-500 text-xl flex items-center justify-center uppercase tracking-widest"><i class="bi bi-trophy-fill mr-3"></i>Salón de la Fama Global</h3>
+                    <div class="mt-12 bg-[#0b0c10] border border-yellow-500/50 rounded-2xl p-4 sm:p-6 shadow-[0_0_15px_rgba(234,179,8,0.15)]">
+                        <h3 class="mb-6 font-bold text-yellow-500 text-lg sm:text-xl text-center uppercase tracking-wide sm:tracking-widest">
+                            <i class="bi bi-trophy-fill block sm:inline-block mb-2 sm:mb-0 sm:mr-2 text-2xl sm:text-xl"></i>
+                            <span class="block sm:inline-block">Salón de la Fama Global</span>
+                        </h3>
                         <div class="grid gap-4">
                             {% for player in topPlayers %}
                                 {% set playerAvatarType = player.avatar and 'bottts' in player.avatar ? 'bottts' : 'avataaars' %}
-                                <div class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-black/50 to-transparent border border-white/5 hover:border-yellow-500/30 transition-colors">
+                                <div class="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-gradient-to-r from-black/50 to-transparent border border-white/5 hover:border-yellow-500/30 transition-colors">
                                     <div class="flex items-center min-w-0 flex-1 mr-2">
                                         <div class="font-black text-xl sm:text-2xl text-gray-600 mr-2 sm:mr-4 w-6 sm:w-8 text-center flex-shrink-0">#{{ loop.index }}</div>
                                         <img src="https://api.dicebear.com/7.x/{{ playerAvatarType }}/svg?seed={{ player.avatar ?: player.email }}" alt="Avatar" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full mr-3 sm:mr-4 border border-[#45a29e] bg-[#1f2833] flex-shrink-0">
