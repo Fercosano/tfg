@@ -19,13 +19,16 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/home', name: 'app_home')]
-    public function index(CourseRepository $courseRepository, \App\Repository\UserProgressRepository $progressRepo): Response
+    public function index(CourseRepository $courseRepository, \App\Repository\UserProgressRepository $progressRepo, \App\Repository\UserRepository $userRepo): Response
     {
         // Obtenemos todos los cursos para listarlos en el Dashboard
         $courses = $courseRepository->findBy([], ['id' => 'ASC']);
         
         $completedLessons = [];
         $rankName = 'Chatarrero del Búnker'; // Rango inicial por defecto
+        
+        // Obtener el Salón de la Fama
+        $topPlayers = $userRepo->findTopPlayers(5);
         
         if ($this->getUser()) {
             $progresses = $progressRepo->findBy(['user' => $this->getUser(), 'isCompleted' => true]);
@@ -50,6 +53,7 @@ final class HomeController extends AbstractController
             'courses' => $courses,
             'completedLessons' => $completedLessons,
             'rankName' => $rankName,
+            'topPlayers' => $topPlayers,
         ]);
     }
 

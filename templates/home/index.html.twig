@@ -105,6 +105,30 @@
                             </div>
                         </div>
                     {% endfor %}
+                    
+                    <!-- Salón de la Fama (Leaderboard) -->
+                    <div class="mt-12 bg-[#0b0c10] border border-yellow-500/50 rounded-2xl p-6 shadow-[0_0_15px_rgba(234,179,8,0.15)]">
+                        <h3 class="mb-6 font-bold text-yellow-500 text-xl flex items-center justify-center uppercase tracking-widest"><i class="bi bi-trophy-fill mr-3"></i>Salón de la Fama Global</h3>
+                        <div class="grid gap-4">
+                            {% for player in topPlayers %}
+                                {% set playerAvatarType = player.avatar and 'bottts' in player.avatar ? 'bottts' : 'avataaars' %}
+                                <div class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-black/50 to-transparent border border-white/5 hover:border-yellow-500/30 transition-colors">
+                                    <div class="flex items-center">
+                                        <div class="font-black text-2xl text-gray-600 mr-4 w-8 text-center">#{{ loop.index }}</div>
+                                        <img src="https://api.dicebear.com/7.x/{{ playerAvatarType }}/svg?seed={{ player.avatar ?: player.email }}" alt="Avatar" class="w-12 h-12 rounded-full mr-4 border border-[#45a29e] bg-[#1f2833]">
+                                        <div>
+                                            <div class="text-white font-bold">{{ player.username ?: player.email | split('@')[0] }}</div>
+                                            <div class="text-xs text-gray-400">Rango Experto</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center text-yellow-500 font-bold bg-yellow-500/10 px-4 py-2 rounded-lg border border-yellow-500/20 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
+                                        {{ player.xp }} XP
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                 </div>
             </div>
         {% else %}
