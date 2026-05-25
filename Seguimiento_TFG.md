@@ -159,7 +159,8 @@ Se ha diseñado un **Storytelling** para dar contexto a los problemas lógicos, 
 Para garantizar un aprendizaje efectivo sin frustración, se ha diseñado una arquitectura lógica en Frontend capaz de analizar por qué falla un estudiante y ofrecer ayuda personalizada a través del personaje del Padre:
 1. **Atrapado de Errores de Sintaxis (`try...catch`):** Si el código se rompe por falta de un punto y coma o un paréntesis, el sistema lo detecta antes de colapsar y el Padre envía un mensaje específico (Ej: *"Hijo, el comando tiene un error de sintaxis..."*).
 2. **Validación de Resultados Lógicos:** Se captura la salida estándar (`console.log`) en el navegador de forma aislada y se compara con el resultado esperado (`expectedOutput`). Si no coincide, el Padre orienta sobre el error de cálculo.
-3. **Análisis de Código Estático (RegEx):** Mediante Expresiones Regulares, verificaremos si el estudiante está usando las palabras clave correctas (ej. `let` en vez de `var` para variables modernas), corrigiendo malas prácticas incluso si el código "funciona".
+3. **Análisis de Código Estático (RegEx) - [COMPLETADO]:** Mediante Expresiones Regulares en JavaScript, se ha añadido la verificación de palabras clave (ej. evitando el uso de `var` e instando al uso de `let` o `const`). El sistema intercepta el error y "El Padre" avisa sobre la mala práctica antes de ejecutar el código.
+4. **Manejo de la Frustración (Contador de Intentos) - [COMPLETADO]:** Se ha implementado un rastreador de fallos consecutivos. Si el estudiante se atasca y envía código erróneo (ya sea por lógica o sintaxis) 3 veces seguidas, el sistema interviene automáticamente con una alerta táctica de "El Padre" que le ofrece pistas mucho más explícitas sobre la sintaxis (llaves, comillas, paréntesis) y palabras de ánimo para evitar el bloqueo cognitivo.
 
 ### 4. Sistema de Experiencia (XP) con Propósito Narrativo
 Se ha rediseñado la mecánica de puntuación para que no sea un número vacío, sino un elemento central de la progresión:
@@ -170,7 +171,7 @@ Se ha rediseñado la mecánica de puntuación para que no sea un número vacío,
 Pensando en usuarios sin experiencia previa, se implementará un sistema inspirado en juegos educativos como *Flexbox Froggy*:
 - **Fill-in-the-Blanks (Código Parcial):** En los primeros niveles, el editor no está vacío. El jugador se encuentra una plantilla con la estructura hecha (Ej: `let ______ = "Hola Mundo";`) y solo debe rellenar los huecos clave.
 - **Manual de Supervivencia Visual:** Acompañando a la consola, habrá un panel donde el Padre resalta visualmente la sintaxis exacta necesaria.
-- **Asistencia Activa:** Si el jugador se queda atascado (sin teclear) durante unos segundos, el sistema interviene dándole una pista más explícita.
+- **Asistencia Activa - [COMPLETADO]:** Si el jugador se queda atascado (sin teclear nada en el editor) durante 45 segundos, el temporizador de inactividad hace saltar un mensaje de radio de "El Padre" en la terminal animándole a revisar las pistas del panel izquierdo.
 
 ---
 
@@ -184,4 +185,36 @@ Para emular la excelencia de plataformas referentes (como *Flexbox Froggy* o pla
 4. **Backend Potenciado:** El *EasyAdmin* ha sido actualizado para proporcionar dos campos de texto enriquecidos (`TextEditorField`), permitiendo al profesor diseñar la narrativa visual y las instrucciones técnicas cómodamente, con soporte para resaltado de código en las ayudas (`<code>`).
 
 ---
-*Documento actualizado con la integración final de la Cinemática Previa y la separación técnica/narrativa del juego.*
+
+## Fase 7: Mecánicas Finales de Progresión y Recompensas
+
+Para completar el ciclo de gamificación y dar sentido a la evolución del estudiante en la plataforma, se han implementado las mecánicas finales que estructuran el avance a lo largo del juego:
+
+### 1. Sistema Dinámico de Rangos (Narrativa de Ascenso)
+En lugar de depender exclusivamente del XP numérico, el perfil del estudiante en el Dashboard evoluciona orgánicamente adquiriendo "Rangos" según el número de niveles superados (ej. pasando de *Chatarrero del Búnker* a *Arquitecto del Refugio*). Esto refuerza el sentido de pertenencia y logro.
+
+### 2. Bloqueo de Mundos (Pruebas de Autorización)
+Se han estructurado los contenidos en 3 grandes "Pruebas" (Mundos) con 3 niveles cada una.
+La interfaz lista todas las pruebas disponibles, pero bloquea de manera visual y funcional el acceso a las Pruebas 2 y 3 (visualizadas en gris y con advertencias) hasta que el estudiante haya superado el número de niveles requerido. Esto garantiza una curva de aprendizaje secuencial.
+
+### 3. La Libreta del Padre (Manual de Supervivencia)
+Para evitar que el alumno abandone el "estado de flujo" de la plataforma buscando documentación externa en Google, se ha integrado un botón en la interfaz de programación que despliega un panel lateral (Offcanvas). Este panel simula ser unos apuntes antiguos del Padre con una *cheat-sheet* inmersiva sobre la sintaxis básica de JavaScript.
+
+### 4. Recompensas Inteligentes (XP Multiplier)
+El controlador del servidor ahora evalúa la eficacia del alumno a través del rastreador de fallos. Si el nivel se supera al primer intento sin cometer errores (`failedAttempts == 0`), el estudiante recibe una bonificación por "Excelencia" sumando **75 XP** en lugar de los 50 XP base. Esta mecánica incentiva el pensamiento analítico antes de ejecutar el código de forma compulsiva.
+
+---
+
+## Fase 8: Pulido Visual y Sensación de Juego (Game Feel / Juiciness)
+
+Para elevar la calidad del TFG al nivel de un producto comercial, se ha implementado una capa final de *Polish* que potencia la inmersión del estudiante en el ecosistema del Búnker:
+
+1. **Efecto Typewriter y Sonido Sintético (Web Audio API):**
+   La cinemática de introducción a cada nivel no muestra el texto de golpe. Se ha desarrollado un script en JavaScript que "teclea" el contenido letra a letra. Para maximizar la inmersión sin depender de archivos MP3 externos, se ha utilizado la `Web Audio API` para sintetizar frecuencias de ondas cuadradas (Square Waves) que emulan el sonido robótico de una terminal antigua por cada letra impresa.
+2. **Efecto Visual de Fallo Crítico (Glitch):**
+   Aprovechando el rastreador de `failedAttempts`, si el estudiante falla más de 3 veces consecutivas, el contenedor de código completo sufre una animación CSS tipo *Shake/Glitch* (vibración rápida con sombra roja) simulando la inestabilidad de la terminal por los errores del alumno.
+3. **Feedback Positivo Visual (Medallas de Excelencia):**
+   Conectado con el Multiplicador de XP, si el alumno resuelve el nivel con código perfecto (0 fallos), la ventana de victoria transforma el trofeo estándar en una "Estrella de Oro" destellante. Este micro-feedback visual genera dopamina y fomenta que el estudiante repase su código mentalmente antes de pulsar "Ejecutar".
+
+---
+*Documento actualizado con la implementación final de las mecánicas de gamificación, progresión por rangos y la capa final de pulido visual y auditivo.*

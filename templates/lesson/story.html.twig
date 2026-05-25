@@ -48,8 +48,8 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 3px solid var(--gamer-primary);
-            box-shadow: 0 0 20px var(--gamer-primary);
+            border: 3px solid #66fcf1;
+            box-shadow: 0 0 20px #66fcf1;
             margin-bottom: 2rem;
             background-color: #1a1a1a;
             display: flex;
@@ -59,8 +59,8 @@
         }
         
         @keyframes pulse-border {
-            0% { box-shadow: 0 0 10px var(--gamer-primary); }
-            100% { box-shadow: 0 0 30px var(--gamer-primary), 0 0 10px var(--gamer-primary) inset; }
+            0% { box-shadow: 0 0 10px #66fcf1; }
+            100% { box-shadow: 0 0 30px #66fcf1, 0 0 10px #66fcf1 inset; }
         }
 
         .typing-text {
@@ -75,7 +75,7 @@
         .typing-text p { margin-bottom: 1.5rem; }
 
         .btn-terminal {
-            background-color: var(--gamer-primary);
+            background-color: #66fcf1;
             color: #000;
             font-weight: bold;
             font-size: 1.2rem;
@@ -85,7 +85,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.3s;
-            box-shadow: 0 0 15px var(--gamer-primary);
+            box-shadow: 0 0 15px #66fcf1;
             opacity: 0;
             transform: translateY(20px);
             animation: fade-in-up 1s forwards;
@@ -94,13 +94,21 @@
         
         .btn-terminal:hover {
             transform: scale(1.05) translateY(0);
-            box-shadow: 0 0 30px var(--gamer-primary);
+            box-shadow: 0 0 30px #66fcf1;
             color: #000;
         }
         
         @keyframes fade-in-up {
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Cursor parpadeante para el typewriter */
+        .typing-cursor::after {
+            content: "█";
+            animation: blink-cursor 1s infinite;
+            color: #66fcf1;
+        }
+        @keyframes blink-cursor { 50% { opacity: 0; } }
         
         .signal-lost {
             color: #ff5555;
@@ -115,25 +123,27 @@
 {% endblock %}
 
 {% block body %}
-    <div class="story-container text-center">
+    <div class="story-container text-center mx-auto">
         <div class="signal-lost mb-4" id="signalStatus">Conexión Establecida</div>
         
-        <div class="d-flex flex-column align-items-center">
+        <div class="flex flex-col items-center">
             <div class="avatar-father">
-                <i class="bi bi-person-bounding-box text-light" style="font-size: 4rem;"></i>
+                <i class="bi bi-person-bounding-box text-white text-6xl"></i>
             </div>
-            <h3 class="text-white fw-bold mb-1">El Padre</h3>
-            <p class="text-info mb-4">Ingeniero Jefe - Búnker 42</p>
+            <h3 class="text-white font-bold mb-1 text-2xl">El Padre</h3>
+            <p class="text-[#66fcf1] mb-8">Ingeniero Jefe - Búnker 42</p>
         </div>
 
-        <div class="typing-text text-start mx-auto" style="max-width: 600px;" id="loreBox">
-            {# Mostramos el lore (historia) de la BD #}
-            {{ lesson.lore|raw }}
+        <div class="typing-text text-left mx-auto typing-cursor max-w-[600px]" id="loreBox">
+            {# El contenido se inyectará letra a letra con JS #}
         </div>
         
-        <div class="mt-5">
-            <a href="{{ path('app_lesson_play', {'id': lesson.id}) }}" class="btn btn-terminal text-decoration-none">
-                <i class="bi bi-terminal me-2"></i> Acceder a la Terminal
+        <!-- Guardamos el texto original invisible para que JS lo lea -->
+        <div id="hiddenLore" class="hidden">{{ lesson.lore|raw }}</div>
+        
+        <div class="mt-12">
+            <a href="{{ path('app_lesson_play', {'id': lesson.id}) }}" class="btn-terminal inline-flex items-center no-underline" id="btnStart">
+                <i class="bi bi-terminal mr-2"></i> Acceder a la Terminal
             </a>
         </div>
     </div>
@@ -143,21 +153,65 @@
     {{ parent() }}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Efecto Typewriter para el lore
             const loreBox = document.getElementById('loreBox');
-            const originalHTML = loreBox.innerHTML;
+            const hiddenLore = document.getElementById('hiddenLore').innerHTML.trim();
+            const btnStart = document.getElementById('btnStart');
             
-            // Un truco sencillo para hacer un fade in del texto en lugar de escribir letra a letra
-            // porque escribir HTML (etiquetas strong, p) letra a letra rompe el formato.
-            loreBox.style.opacity = 0;
-            let opacity = 0;
-            let interval = setInterval(() => {
-                opacity += 0.02;
-                loreBox.style.opacity = opacity;
-                if (opacity >= 1) clearInterval(interval);
-            }, 50);
+            // Ocultar botón inicialmente
+            btnStart.style.animation = 'none';
+            btnStart.style.opacity = 0;
             
-            // Jugar un pequeño sonido de terminal si es posible (los navegadores lo bloquean sin interacción, pero podemos simular el ambiente visual)
+            // --- Sintetizador de Audio Retro (Web Audio API) ---
+            let audioCtx = null;
+            function playBeep() {
+                try {
+                    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(800 + Math.random() * 200, audioCtx.currentTime); 
+                    
+                    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    
+                    oscillator.start();
+                    oscillator.stop(audioCtx.currentTime + 0.05);
+                } catch(e) { }
+            }
+
+            // --- Efecto Typewriter Avanzado (Soporta HTML) ---
+            let i = 0;
+            let isTag = false;
+            let currentText = '';
+            
+            function typeWriter() {
+                if (i < hiddenLore.length) {
+                    const char = hiddenLore.charAt(i);
+                    currentText += char;
+                    loreBox.innerHTML = currentText;
+                    
+                    if (char === '<') isTag = true;
+                    if (char === '>') isTag = false;
+                    
+                    i++;
+                    
+                    if (isTag) {
+                        typeWriter(); 
+                    } else {
+                        if (i % 3 === 0) playBeep();
+                        setTimeout(typeWriter, Math.random() * 40 + 20);
+                    }
+                } else {
+                    loreBox.classList.remove('typing-cursor');
+                    btnStart.style.animation = 'fade-in-up 1s forwards';
+                }
+            }
+            
+            setTimeout(typeWriter, 500);
         });
     </script>
 {% endblock %}

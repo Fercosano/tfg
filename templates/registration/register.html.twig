@@ -1,46 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registrarse - Plataforma de Aprendizaje{% endblock %}
+{% block title %}Crear Personaje - Hello World! Party{% endblock %}
 
 {% block body %}
-<div class="row mt-5">
-    <div class="col-md-6 offset-md-3">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary text-white text-center py-3">
-                <h2 class="mb-0">Crear una Cuenta</h2>
+<div class="flex justify-center items-center min-h-[60vh]">
+    <div class="w-full max-w-md">
+        <div class="card-gamer p-8 relative overflow-hidden">
+            <!-- Glow background effect -->
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#66fcf1] rounded-full mix-blend-screen filter blur-[80px] opacity-30"></div>
+            <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-[#45a29e] rounded-full mix-blend-screen filter blur-[80px] opacity-30"></div>
+            
+            <div class="text-center mb-8 relative z-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1f2833] border-2 border-[#66fcf1] shadow-[0_0_15px_rgba(102,252,241,0.5)] mb-4">
+                    <i class="bi bi-person-plus-fill text-3xl text-[#66fcf1]"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-white tracking-widest uppercase text-shadow-[0_0_10px_rgba(102,252,241,0.5)]">Nuevo Jugador</h2>
+                <p class="text-gray-400 text-sm mt-2">Crea tu personaje para acceder al Búnker 42</p>
             </div>
-            <div class="card-body p-4">
+
+            <div class="relative z-10">
                 {% for flash_error in app.flashes('verify_email_error') %}
-                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                    <div class="bg-red-900/40 border border-red-500 text-red-400 p-3 rounded-lg mb-6 text-sm flex items-center shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+                        <i class="bi bi-exclamation-triangle-fill mr-2"></i> {{ flash_error }}
+                    </div>
                 {% endfor %}
 
-                {{ form_errors(registrationForm) }}
+                <div class="text-red-400 text-sm mb-4">
+                    {{ form_errors(registrationForm) }}
+                </div>
 
-                {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
-                    <div class="mb-3">
-                        {{ form_label(registrationForm.email, 'Correo Electrónico', {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'ejemplo@correo.com'}}) }}
-                        <div class="text-danger mt-1">{{ form_errors(registrationForm.email) }}</div>
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-5'}}) }}
+                    <div>
+                        {{ form_label(registrationForm.email, 'Correo Electrónico', {'label_attr': {'class': 'label-gamer'}}) }}
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-envelope-fill text-gray-500"></i>
+                            </div>
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'input-gamer pl-10', 'placeholder': 'ejemplo@bunker.com'}}) }}
+                        </div>
+                        <div class="text-red-400 text-xs mt-1">{{ form_errors(registrationForm.email) }}</div>
                     </div>
 
-                    <div class="mb-3">
-                        {{ form_label(registrationForm.plainPassword, 'Contraseña', {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Mínimo 6 caracteres'}}) }}
-                        <div class="text-danger mt-1">{{ form_errors(registrationForm.plainPassword) }}</div>
+                    <div>
+                        {{ form_label(registrationForm.plainPassword, 'Contraseña', {'label_attr': {'class': 'label-gamer'}}) }}
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-shield-lock-fill text-gray-500"></i>
+                            </div>
+                            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input-gamer pl-10', 'placeholder': 'Mínimo 6 caracteres'}}) }}
+                        </div>
+                        <div class="text-red-400 text-xs mt-1">{{ form_errors(registrationForm.plainPassword) }}</div>
                     </div>
 
-                    <div class="mb-4 form-check">
-                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
-                        {{ form_label(registrationForm.agreeTerms, 'Acepto los términos y condiciones', {'label_attr': {'class': 'form-check-label'}}) }}
+                    <div class="flex items-center mt-6">
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-4 h-4 bg-[#0b0c10] border border-[#45a29e] rounded focus:ring-[#66fcf1] focus:ring-2 text-[#66fcf1]'}}) }}
+                        {{ form_label(registrationForm.agreeTerms, 'Acepto los términos y condiciones', {'label_attr': {'class': 'ml-2 text-sm text-gray-400 hover:text-white cursor-pointer transition-colors'}}) }}
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Registrarse</button>
+                    <div class="mt-8">
+                        <button type="submit" class="w-full bg-[#66fcf1] text-black font-bold uppercase tracking-widest py-3 rounded-lg hover:bg-white hover:scale-[1.02] transition-all duration-300 shadow-[0_0_15px_rgba(102,252,241,0.4)] hover:shadow-[0_0_25px_rgba(102,252,241,0.8)] flex justify-center items-center">
+                            <i class="bi bi-lightning-charge-fill mr-2"></i> Crear Personaje
+                        </button>
                     </div>
                 {{ form_end(registrationForm) }}
             </div>
-            <div class="card-footer text-center py-3 bg-light">
-                ¿Ya tienes una cuenta? <a href="{{ path('app_login') }}" class="text-primary text-decoration-none">Inicia sesión aquí</a>
+            
+            <div class="mt-8 text-center relative z-10 border-t border-[#45a29e]/30 pt-6">
+                <span class="text-gray-400">¿Ya tienes una cuenta?</span> 
+                <a href="{{ path('app_login') }}" class="text-[#66fcf1] font-bold hover:text-white transition-colors ml-1 uppercase tracking-wide text-sm">Inicia sesión aquí</a>
             </div>
         </div>
     </div>

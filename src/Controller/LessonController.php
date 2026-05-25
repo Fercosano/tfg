@@ -48,19 +48,22 @@ final class LessonController extends AbstractController
         
         $codeSubmitted = $data['code'] ?? '';
         $success = $data['success'] ?? false;
+        $failedAttempts = $data['failedAttempts'] ?? 0;
 
         if ($success) {
             // Buscamos si ya existe el progreso para no duplicarlo (y no dar XP infinitos)
             $progress = $upRepository->findOneBy(['user' => $user, 'lesson' => $lesson]);
             
+            $xpEarned = 0;
             if (!$progress) {
                 // Nuevo progreso, asignar XP
                 $progress = new UserProgress();
                 $progress->setUser($user);
                 $progress->setLesson($lesson);
                 
-                // Sumamos 50 XP por nivel superado por primera vez
-                $user->setXp($user->getXp() + 50);
+                // Bonificación por Excelencia: Si lo resuelve a la primera (0 fallos), x1.5 XP
+                $xpEarned = ($failedAttempts === 0) ? 75 : 50;
+                $user->setXp($user->getXp() + $xpEarned);
             }
             
             $progress->setCompleted(true);
@@ -69,7 +72,7 @@ final class LessonController extends AbstractController
             $em->persist($progress);
             $em->flush();
             
-            return new JsonResponse(['status' => 'success', 'xp_earned' => 50, 'total_xp' => $user->getXp()]);
+            return new JsonResponse(['status' => 'success', 'xp_earned' => $xpEarned, 'total_xp' => $user->getXp()]);
         }
 
         return new JsonResponse(['status' => 'error'], 400);

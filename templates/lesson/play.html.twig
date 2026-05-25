@@ -8,12 +8,12 @@
         body, html {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Evitar scroll en la pantalla principal del juego */
+            overflow: hidden; 
             background-color: #0b0c10;
         }
         .game-container {
             display: flex;
-            height: calc(100vh - 70px); /* Restamos la altura aproximada del navbar */
+            height: calc(100vh - 70px); 
             border-top: 1px solid rgba(102, 252, 241, 0.2);
         }
         
@@ -28,7 +28,7 @@
             flex-direction: column;
         }
         .lore-header {
-            border-bottom: 1px dashed var(--gamer-primary);
+            border-bottom: 1px dashed #66fcf1;
             padding-bottom: 1rem;
             margin-bottom: 1.5rem;
         }
@@ -43,7 +43,7 @@
             width: 65%;
             display: flex;
             flex-direction: column;
-            background-color: #1e1e1e; /* Fondo oscuro estándar para IDEs */
+            background-color: #1e1e1e; 
         }
         .editor-container {
             height: 70%;
@@ -85,46 +85,63 @@
         .console-error { color: #ff5555; margin-bottom: 5px; }
         .console-success { color: #50fa7b; margin-bottom: 5px; font-weight: bold; }
         
-        .btn-neon-run {
-            background-color: transparent;
-            color: var(--gamer-primary);
-            border: 1px solid var(--gamer-primary);
-            box-shadow: 0 0 10px rgba(102,252,241,0.2);
-            transition: all 0.3s;
+        /* Efecto Glitch al fallar */
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-3px, 3px) }
+            40% { transform: translate(-3px, -3px) }
+            60% { transform: translate(3px, 3px) }
+            80% { transform: translate(3px, -3px) }
+            100% { transform: translate(0) }
         }
-        .btn-neon-run:hover {
-            background-color: var(--gamer-primary);
-            color: #000;
-            box-shadow: 0 0 20px rgba(102,252,241,0.8);
+        .glitch-active {
+            animation: glitch-anim 0.3s;
+            animation-iteration-count: 3;
+            box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.5) !important;
         }
         
-        /* Ocultar el pie de página de la plantilla base en el modo juego */
         footer { display: none !important; }
+
+        /* Custom Offcanvas & Modal transitions */
+        #offcanvasPadre {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+        }
+        #offcanvasPadre.open {
+            transform: translateX(0);
+        }
+        
+        #victoryModal.open {
+            display: flex;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="game-container">
+<div class="game-container w-full max-w-full !px-0 !mx-0">
     
     <!-- LORE PANEL (Izquierda) -->
-    <div class="lore-panel">
-        <div class="mb-3">
-            <a href="{{ path('app_home') }}" class="text-secondary text-decoration-none"><i class="bi bi-arrow-left me-1"></i> Abortar Misión</a>
+    <div class="lore-panel h-full">
+        <div class="mb-4 flex justify-between items-center">
+            <a href="{{ path('app_home') }}" class="text-gray-400 hover:text-white transition-colors flex items-center text-sm"><i class="bi bi-arrow-left mr-2"></i> Abortar Misión</a>
+            <button id="btnOpenNotebook" class="text-xs border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black transition-colors rounded-full px-3 py-1.5 flex items-center shadow-[0_0_5px_rgba(234,179,8,0.3)]">
+                <i class="bi bi-journal-bookmark-fill mr-1"></i> Libreta del Padre
+            </button>
         </div>
         
         <div class="lore-header">
-            <span class="badge bg-transparent border border-info text-info mb-2"><i class="bi bi-geo-alt"></i> Nivel en curso</span>
-            <h2 class="text-white fw-bold mb-0" style="color: var(--gamer-primary) !important;">{{ lesson.title }}</h2>
+            <span class="inline-block bg-transparent border border-[#66fcf1] text-[#66fcf1] mb-3 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"><i class="bi bi-geo-alt mr-1"></i> Nivel en curso</span>
+            <h2 class="text-3xl font-bold text-[#66fcf1]">{{ lesson.title }}</h2>
         </div>
         
-        <div class="typewriter-text" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1rem;">
+        <div class="typewriter-text font-sans text-base">
             {# Mostramos el contenido técnico (Pistas de Froggy) #}
             {{ lesson.content|raw }}
         </div>
     </div>
     
     <!-- CODE PANEL (Derecha) -->
-    <div class="code-panel">
+    <div class="code-panel h-full">
         
         <!-- Editor de Código -->
         <div class="editor-container">
@@ -133,41 +150,88 @@
         
         <!-- Consola -->
         <div class="console-container">
-            <div class="console-header">
-                <span class="text-secondary fw-bold"><i class="bi bi-terminal me-2"></i>Terminal del Sistema</span>
-                <button id="runCodeBtn" class="btn btn-sm btn-neon-run rounded-pill px-4 fw-bold"><i class="bi bi-play-fill"></i> Ejecutar Código</button>
+            <div class="console-header flex justify-between items-center py-2 px-4 bg-[#1a1a1a] border-b border-[#333]">
+                <span class="text-gray-400 font-bold flex items-center text-sm"><i class="bi bi-terminal mr-2"></i>Terminal del Sistema</span>
+                <button id="runCodeBtn" class="bg-transparent border border-[#66fcf1] text-[#66fcf1] hover:bg-[#66fcf1] hover:text-black transition-all rounded-full px-5 py-1.5 font-bold text-sm shadow-[0_0_10px_rgba(102,252,241,0.2)] hover:shadow-[0_0_20px_rgba(102,252,241,0.8)] flex items-center">
+                    <i class="bi bi-play-fill mr-1 text-lg"></i> Ejecutar Código
+                </button>
             </div>
             <div class="console-output" id="consoleOutput">
-                <div class="text-secondary">Esperando órdenes...</div>
+                <div class="text-gray-500 italic">Esperando órdenes...</div>
             </div>
         </div>
         
     </div>
-    <div id="game-data" style="display:none;"
+    <div id="game-data" class="hidden"
          data-expected-output="{{ lesson.expectedOutput|escape('html_attr') }}"
          data-submit-url="{{ path('app_lesson_submit', {'id': lesson.id}) }}">
     </div>
 
 </div>
 
-<!-- Modal Victoria -->
-<div class="modal fade" id="victoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-center p-4 border-0" style="background-color: var(--gamer-surface); box-shadow: 0 0 30px rgba(102,252,241,0.5);">
-      <div class="modal-body">
-        <i class="bi bi-trophy-fill display-1 text-warning mb-3" style="filter: drop-shadow(0 0 10px rgba(255,193,7,0.8));"></i>
-        <h2 class="text-white fw-bold mb-3">¡Misión Cumplida!</h2>
-        <p class="text-secondary fs-5">Has restaurado la terminal con éxito.</p>
-        <div class="d-inline-block px-4 py-2 rounded-pill border border-warning text-warning fw-bold fs-4 mb-4">
+<!-- Modal Victoria Custom -->
+<div id="victoryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center">
+    <div class="bg-[#1f2833] border border-[#66fcf1] rounded-2xl p-10 text-center max-w-md w-full shadow-[0_0_40px_rgba(102,252,241,0.3)] transform transition-all scale-100">
+        <i id="victoryIcon" class="bi bi-trophy-fill text-6xl text-yellow-400 block mb-6 drop-shadow-[0_0_15px_rgba(250,204,21,0.6)]"></i>
+        <h2 id="victoryTitle" class="text-3xl font-bold text-white mb-4">¡Misión Cumplida!</h2>
+        <p id="victorySubtitle" class="text-gray-400 mb-6 text-lg">Has restaurado la terminal con éxito.</p>
+        
+        <div class="inline-block px-6 py-3 rounded-full border-2 border-yellow-400 text-yellow-400 font-bold text-2xl mb-8 bg-yellow-400/10 shadow-[0_0_15px_rgba(250,204,21,0.2)]">
             + <span id="xpGained">50</span> XP
         </div>
-        <div>
-            <a href="{{ path('app_home') }}" class="btn btn-lg w-100 fw-bold" style="background-color: var(--gamer-primary); color: #000;">Continuar Viaje <i class="bi bi-arrow-right"></i></a>
+        
+        <div class="mt-2">
+            <a href="{{ path('app_home') }}" class="block w-full py-4 rounded-full bg-[#66fcf1] text-black font-bold uppercase tracking-wider hover:bg-white transition-colors shadow-[0_0_15px_rgba(102,252,241,0.5)]">
+                Continuar Viaje <i class="bi bi-arrow-right ml-2"></i>
+            </a>
         </div>
-      </div>
     </div>
-  </div>
 </div>
+
+<!-- Offcanvas: Apuntes del Padre Custom -->
+<div id="offcanvasPadre" class="fixed inset-y-0 left-0 w-80 bg-[#0b0c10] border-r border-[#66fcf1] shadow-[5px_0_25px_rgba(102,252,241,0.15)] z-[90] flex flex-col">
+    <div class="p-5 border-b border-[#45a29e]/50 flex justify-between items-center bg-[#1f2833]">
+        <h5 class="font-bold text-white text-lg flex items-center"><i class="bi bi-journal-code text-yellow-500 mr-3"></i>Manual de Supervivencia</h5>
+        <button id="btnCloseNotebook" class="text-gray-400 hover:text-white transition-colors text-2xl">&times;</button>
+    </div>
+    
+    <div class="p-6 overflow-y-auto flex-grow font-mono text-sm">
+        <p class="text-gray-400 mb-8 italic">"Hijo, si estás leyendo esto, es que te has atascado. Aquí tienes mis viejos apuntes de programación del viejo mundo. Úsalos sabiamente." - El Padre</p>
+        
+        <div class="mb-8">
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">1. Mostrar mensajes (Imprimir)</h6>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800 mb-1">console.log("Texto");</code>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800">console.log(variable);</code>
+        </div>
+        
+        <div class="mb-8">
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">2. Variables (Guardar datos)</h6>
+            <p class="text-gray-500 text-xs mb-2">Nunca uses 'var', está obsoleto.</p>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800 mb-1">let nombre = "Búnker";</code>
+            <code class="text-gray-300 block bg-black/50 p-2 rounded border border-gray-800">const MAX_ENERGIA = 100;</code>
+        </div>
+        
+        <div class="mb-8">
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">3. Condicionales (Decisiones)</h6>
+            <code class="text-gray-300 block bg-black/50 p-3 rounded border border-gray-800 whitespace-pre">if (energia < 50) {
+  console.log("Peligro");
+} else {
+  console.log("Seguro");
+}</code>
+        </div>
+        
+        <div class="mb-8">
+            <h6 class="text-[#66fcf1] font-bold border-b border-[#66fcf1]/30 pb-2 mb-3 uppercase tracking-wider text-xs">4. Bucles (Repeticiones)</h6>
+            <code class="text-gray-300 block bg-black/50 p-3 rounded border border-gray-800 whitespace-pre">// Repetir 3 veces
+for(let i=1; i<=3; i++) {
+  console.log(i);
+}</code>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="offcanvasOverlay" class="fixed inset-0 bg-black/50 z-[80] hidden backdrop-blur-sm transition-opacity opacity-0"></div>
 
 {% endblock %}
 
@@ -181,6 +245,29 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- UI Setup (Modals y Offcanvas) ---
+            const btnOpenNotebook = document.getElementById('btnOpenNotebook');
+            const btnCloseNotebook = document.getElementById('btnCloseNotebook');
+            const offcanvasPadre = document.getElementById('offcanvasPadre');
+            const offcanvasOverlay = document.getElementById('offcanvasOverlay');
+            
+            function openNotebook() {
+                offcanvasOverlay.classList.remove('hidden');
+                setTimeout(() => offcanvasOverlay.classList.remove('opacity-0'), 10);
+                offcanvasPadre.classList.add('open');
+            }
+            
+            function closeNotebook() {
+                offcanvasPadre.classList.remove('open');
+                offcanvasOverlay.classList.add('opacity-0');
+                setTimeout(() => offcanvasOverlay.classList.add('hidden'), 300);
+            }
+            
+            btnOpenNotebook.addEventListener('click', openNotebook);
+            btnCloseNotebook.addEventListener('click', closeNotebook);
+            offcanvasOverlay.addEventListener('click', closeNotebook);
+
+
             // 1. Inicializar Ace Editor
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/dracula");
@@ -214,12 +301,44 @@
                 return div.textContent;
             }
 
+            // --- Sistema de Asistencia Activa (Inactividad) ---
+            let inactivityTimer;
+            const INACTIVITY_TIME = 45000; 
+            
+            function resetInactivityTimer() {
+                clearTimeout(inactivityTimer);
+                inactivityTimer = setTimeout(() => {
+                    printToConsole('El Padre dice: [Transmisión entrante] ¿Sigues ahí, hijo? Recuerda revisar el manual de supervivencia a la izquierda si te atascas...', 'log');
+                }, INACTIVITY_TIME);
+            }
+            
+            editor.getSession().on('change', function() {
+                resetInactivityTimer();
+            });
+            resetInactivityTimer();
+
+            // --- Sistema de Pistas por Intentos Fallidos ---
+            let failedAttempts = 0;
+
             runBtn.addEventListener('click', function() {
-                // Limpiar consola
                 consoleOutput.innerHTML = '';
                 const code = editor.getValue();
                 
-                // Variable para almacenar todo lo que el usuario imprima
+                resetInactivityTimer();
+
+                // --- Análisis de Código Estático (Ayuda Inteligente) ---
+                let staticErrors = false;
+                
+                if (/\bvar\s+/.test(code)) {
+                    printToConsole('El Padre dice: ¡Cuidado soldado! En este búnker usamos tecnología moderna. Sustituye esos "var" por "let" o "const" para evitar fugas de memoria en el reactor.', 'error');
+                    staticErrors = true;
+                }
+                
+                if (staticErrors) {
+                    printToConsole('--- EJECUCIÓN ABORTADA POR PROTOCOLO ---', 'error');
+                    return;
+                }
+                
                 let userOutput = [];
 
                 // Secuestrar console.log
@@ -240,38 +359,48 @@
                 };
 
                 try {
-                    // Ejecutar el código del usuario de forma aislada
-                    // Usamos new Function para evaluar
                     const executeCode = new Function(code);
                     executeCode();
                     
-                    // Comprobar la victoria
                     const finalOutputString = userOutput.join('\n').trim();
                     if (finalOutputString === expectedOutput.trim()) {
                         printToConsole('--- VALIDACIÓN EXITOSA ---', 'success');
                         triggerVictory(code);
                     } else {
+                        failedAttempts++;
                         printToConsole('--- VALIDACIÓN FALLIDA ---', 'error');
                         printToConsole(`Se esperaba: "${expectedOutput}"`, 'error');
                         printToConsole(`Se recibió: "${finalOutputString}"`, 'error');
-                        printToConsole('El Padre dice: ¡Revisa tu código, soldado! Algo no encaja.', 'log');
+                        
+                        if (failedAttempts >= 3) {
+                            document.querySelector('.game-container').classList.add('glitch-active');
+                            setTimeout(() => document.querySelector('.game-container').classList.remove('glitch-active'), 1000);
+                            printToConsole('El Padre dice: [Alerta Táctica] Hijo, llevas varios intentos. Verifica detenidamente las mayúsculas, espacios y puntuación en lo que estás imprimiendo. ¡No te rindas!', 'log');
+                        } else {
+                            printToConsole('El Padre dice: ¡Revisa tu código, soldado! Algo no encaja.', 'log');
+                        }
                     }
                 } catch (e) {
+                    failedAttempts++;
                     printToConsole(e.toString(), 'error');
-                    printToConsole('El Padre dice: Tienes un error de sintaxis grave. El Búnker no compila.', 'log');
+                    
+                    if (failedAttempts >= 3) {
+                        document.querySelector('.game-container').classList.add('glitch-active');
+                        setTimeout(() => document.querySelector('.game-container').classList.remove('glitch-active'), 1000);
+                        printToConsole('El Padre dice: [Alerta Táctica] Demasiados fallos de sintaxis. ¿Seguro que has cerrado todas las llaves {}, paréntesis () y comillas ""? Revisa línea por línea.', 'log');
+                    } else {
+                        printToConsole('El Padre dice: Tienes un error de sintaxis grave. El Búnker no compila.', 'log');
+                    }
                 } finally {
-                    // Restaurar la consola original
                     console.log = originalLog;
                     console.error = originalError;
                 }
             });
 
             function triggerVictory(codeSubmitted) {
-                // Deshabilitar botón para evitar múltiples envíos
                 runBtn.disabled = true;
-                runBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...';
+                runBtn.innerHTML = 'Guardando...';
 
-                // Llamada AJAX a Symfony
                 fetch(submitUrl, {
                     method: 'POST',
                     headers: {
@@ -280,23 +409,32 @@
                     },
                     body: JSON.stringify({
                         code: codeSubmitted,
-                        success: true
+                        success: true,
+                        failedAttempts: failedAttempts
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        // Mostrar Modal de Victoria
-                        const modal = new bootstrap.Modal(document.getElementById('victoryModal'));
+                        // Lógica de Medalla de Oro (Código Perfecto)
+                        if (data.xp_earned == 75) {
+                            document.getElementById('victoryIcon').className = "bi bi-star-fill text-6xl block mb-6";
+                            document.getElementById('victoryIcon').style.color = "#ffdf00";
+                            document.getElementById('victoryIcon').style.filter = "drop-shadow(0 0 25px #ffdf00)";
+                            document.getElementById('victoryTitle').innerText = "¡Código Perfecto!";
+                            document.getElementById('victoryTitle').style.color = "#ffdf00";
+                            document.getElementById('victorySubtitle').innerText = "Resolución brillante al primer intento. Bonificación de excelencia otorgada.";
+                        }
+                        
                         document.getElementById('xpGained').innerText = data.xp_earned;
-                        modal.show();
+                        document.getElementById('victoryModal').classList.add('open');
                     }
                 })
                 .catch(error => {
                     console.error('Error guardando progreso:', error);
                     printToConsole('Error de red guardando tu progreso.', 'error');
                     runBtn.disabled = false;
-                    runBtn.innerHTML = '<i class="bi bi-play-fill"></i> Ejecutar Código';
+                    runBtn.innerHTML = '<i class="bi bi-play-fill mr-1"></i> Ejecutar Código';
                 });
             }
         });

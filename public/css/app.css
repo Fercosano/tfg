@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --gamer-bg: #0b0c10;
+        --gamer-surface: #1f2833;
+        --gamer-primary: #66fcf1;
+        --gamer-secondary: #45a29e;
+        --gamer-text: #c5c6c7;
+        --neon-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+    }
+    
+    body {
+        background-color: var(--gamer-bg);
+        color: var(--gamer-text);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+}
+
+@layer components {
+    .btn-neon {
+        @apply bg-transparent border border-[#66fcf1] text-[#66fcf1] px-6 py-2 rounded-lg font-bold tracking-wider uppercase transition-all duration-300;
+        box-shadow: 0 0 5px rgba(102, 252, 241, 0.2);
+    }
+    
+    .btn-neon:hover {
+        @apply bg-[#66fcf1] text-black;
+        box-shadow: 0 0 15px rgba(102, 252, 241, 0.6);
+    }
+    
+    .card-gamer {
+        @apply bg-[#1f2833] border border-[#45a29e] border-opacity-30 rounded-xl overflow-hidden shadow-lg transition-transform duration-300;
+    }
+    
+    .card-gamer:hover {
+        @apply transform -translate-y-2 border-[#66fcf1];
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 15px rgba(102, 252, 241, 0.2);
+    }
+    
+    .input-gamer {
+        @apply w-full bg-[#0b0c10] border border-[#45a29e] text-[#c5c6c7] rounded-lg px-4 py-2 focus:outline-none focus:border-[#66fcf1] focus:ring-1 focus:ring-[#66fcf1] transition-colors;
+    }
+    
+    .label-gamer {
+        @apply block text-[#66fcf1] text-sm font-bold mb-2 tracking-wide;
+    }
+}

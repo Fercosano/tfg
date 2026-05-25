@@ -1,47 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Iniciar Sesión - Plataforma de Aprendizaje{% endblock %}
+{% block title %}Iniciar Sesión - Hello World! Party{% endblock %}
 
 {% block body %}
-<div class="row mt-5">
-    <div class="col-md-6 offset-md-3">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary text-white text-center py-3">
-                <h2 class="mb-0">Iniciar Sesión</h2>
+<div class="flex justify-center items-center min-h-[60vh]">
+    <div class="w-full max-w-md">
+        <div class="card-gamer p-8 relative overflow-hidden">
+            <!-- Glow background effect -->
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#66fcf1] rounded-full mix-blend-screen filter blur-[80px] opacity-30"></div>
+            <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-[#45a29e] rounded-full mix-blend-screen filter blur-[80px] opacity-30"></div>
+            
+            <div class="text-center mb-8 relative z-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1f2833] border-2 border-[#66fcf1] shadow-[0_0_15px_rgba(102,252,241,0.5)] mb-4">
+                    <i class="bi bi-box-arrow-in-right text-3xl text-[#66fcf1]"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-white tracking-widest uppercase text-shadow-[0_0_10px_rgba(102,252,241,0.5)]">Acceso</h2>
+                <p class="text-gray-400 text-sm mt-2">Introduce tus credenciales para continuar</p>
             </div>
-            <div class="card-body p-4">
-                <form method="post">
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
 
-                    {% if app.user %}
-                        <div class="mb-3">
-                            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            <form method="post" class="relative z-10">
+                {% if error %}
+                    <div class="bg-red-900/40 border border-red-500 text-red-400 p-3 rounded-lg mb-6 text-sm flex items-center shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+                        <i class="bi bi-exclamation-triangle-fill mr-2"></i> {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="bg-[#1f2833] border border-[#45a29e] text-gray-300 p-3 rounded-lg mb-6 text-sm">
+                        Ya estás logueado como <span class="text-[#66fcf1]">{{ app.user.userIdentifier }}</span>. <a href="{{ path('app_logout') }}" class="text-red-400 hover:text-red-300 ml-2 font-bold transition-colors">Desconectar</a>
+                    </div>
+                {% endif %}
+
+                <div class="mb-5">
+                    <label for="inputEmail" class="label-gamer">Correo Electrónico</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-envelope-fill text-gray-500"></i>
                         </div>
-                    {% endif %}
-
-                    <div class="mb-3">
-                        <label for="inputEmail" class="form-label">Correo Electrónico</label>
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="ejemplo@correo.com">
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="input-gamer pl-10" autocomplete="email" required autofocus placeholder="ejemplo@bunker.com">
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <label for="inputPassword" class="form-label">Contraseña</label>
-                        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                <div class="mb-6">
+                    <label for="inputPassword" class="label-gamer">Contraseña</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-key-fill text-gray-500"></i>
+                        </div>
+                        <input type="password" name="password" id="inputPassword" class="input-gamer pl-10" autocomplete="current-password" required placeholder="••••••••">
                     </div>
+                </div>
 
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                    <div class="d-grid">
-                        <button class="btn btn-primary btn-lg" type="submit">
-                            Entrar
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer text-center py-3 bg-light">
-                ¿No tienes una cuenta? <a href="{{ path('app_register') }}" class="text-primary text-decoration-none">Regístrate aquí</a>
+                <div class="mt-8">
+                    <button class="w-full bg-[#66fcf1] text-black font-bold uppercase tracking-widest py-3 rounded-lg hover:bg-white hover:scale-[1.02] transition-all duration-300 shadow-[0_0_15px_rgba(102,252,241,0.4)] hover:shadow-[0_0_25px_rgba(102,252,241,0.8)] flex justify-center items-center" type="submit">
+                        <i class="bi bi-terminal mr-2"></i> Entrar a la Simulación
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-8 text-center relative z-10 border-t border-[#45a29e]/30 pt-6">
+                <span class="text-gray-400">¿No tienes una cuenta?</span> 
+                <a href="{{ path('app_register') }}" class="text-[#66fcf1] font-bold hover:text-white transition-colors ml-1 uppercase tracking-wide text-sm">Regístrate aquí</a>
             </div>
         </div>
     </div>

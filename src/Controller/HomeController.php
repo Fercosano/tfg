@@ -21,20 +21,35 @@ final class HomeController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function index(CourseRepository $courseRepository, \App\Repository\UserProgressRepository $progressRepo): Response
     {
-        // Obtenemos el primer curso disponible para mostrar la introducción al nivel 1
-        $firstCourse = $courseRepository->findOneBy([], ['id' => 'ASC']);
+        // Obtenemos todos los cursos para listarlos en el Dashboard
+        $courses = $courseRepository->findBy([], ['id' => 'ASC']);
         
         $completedLessons = [];
+        $rankName = 'Chatarrero del Búnker'; // Rango inicial por defecto
+        
         if ($this->getUser()) {
             $progresses = $progressRepo->findBy(['user' => $this->getUser(), 'isCompleted' => true]);
             foreach ($progresses as $p) {
                 $completedLessons[] = $p->getLesson()->getId();
             }
+            
+            // Lógica dinámica de Rangos Narrativos
+            $numCompleted = count($completedLessons);
+            if ($numCompleted >= 9) {
+                $rankName = 'Arquitecto del Refugio';
+            } elseif ($numCompleted >= 7) {
+                $rankName = 'Administrador de la Red';
+            } elseif ($numCompleted >= 4) {
+                $rankName = 'Ingeniero de Sistemas';
+            } elseif ($numCompleted >= 1) {
+                $rankName = 'Técnico de Mantenimiento';
+            }
         }
 
         return $this->render('home/index.html.twig', [
-            'course' => $firstCourse,
+            'courses' => $courses,
             'completedLessons' => $completedLessons,
+            'rankName' => $rankName,
         ]);
     }
 
