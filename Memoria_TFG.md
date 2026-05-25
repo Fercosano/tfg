@@ -8,15 +8,15 @@
 
 ## 1. Introducción y Justificación
 
-La programación se ha convertido en una competencia fundamental en el siglo XXI. Sin embargo, los estudiantes sin conocimientos previos a menudo se enfrentan a una curva de aprendizaje pronunciada caracterizada por la abstracción de los conceptos lógicos y la frustración ante los errores de sintaxis.
+La programación se ha convertido en una competencia fundamental en el siglo XXI. Sin embargo, los jugadors sin conocimientos previos a menudo se enfrentan a una curva de aprendizaje pronunciada caracterizada por la abstracción de los conceptos lógicos y la frustración ante los errores de sintaxis.
 
 El proyecto **"Hello World! Party"** nace con el objetivo de mitigar esta barrera de entrada mediante la creación de un entorno inmersivo y seguro. A través de una narrativa post-apocalíptica y el uso intensivo de dinámicas de gamificación, la plataforma transforma el proceso de aprendizaje del lenguaje JavaScript en una experiencia interactiva ("Game Feel"), similar a un videojuego de resolución de puzzles.
 
 ## 2. Objetivos del Proyecto
 
 ### 2.1. Objetivos Generales
-- Diseñar y desarrollar una plataforma web educativa interactiva capaz de evaluar código fuente introducido por el alumno en tiempo real.
-- Aumentar la retención y el *engagement* del estudiante mediante mecánicas de gamificación.
+- Diseñar y desarrollar una plataforma web educativa interactiva capaz de evaluar código fuente introducido por el jugador en tiempo real.
+- Aumentar la retención y el *engagement* del jugador mediante mecánicas de gamificación.
 
 ### 2.2. Objetivos Específicos
 - Implementar un sistema de autenticación y gestión de sesiones seguro.
@@ -49,25 +49,25 @@ Se sigue rigurosamente el patrón **MVC (Modelo-Vista-Controlador)**:
 - **Vistas:** Plantillas Twig renderizadas en el servidor, potenciadas con Tailwind CSS y JavaScript para la interactividad cliente-servidor.
 
 ### 4.3. Modelo de Datos (Diagrama Entidad-Relación)
-- **`User`**: Almacena las credenciales (hasheadas), el rol (Alumno/Profesor) y los Puntos de Experiencia (XP).
+- **`User`**: Almacena las credenciales (hasheadas), el rol (Jugador/Game Master) y los Puntos de Experiencia (XP).
 - **`Course`**: Modela un "Mundo" o conjunto temático de retos.
 - **`Lesson`**: Representa un desafío individual. Almacena el código inicial (`initialCode`), la narrativa introductiva (`lore`) y la validación (`expectedOutput`).
-- **`UserProgress`**: Tabla resolutiva (Muchos a Muchos) que enlaza `User` y `Lesson`, documentando si el reto ha sido superado y guardando el `codeSubmitted` para auditoría docente.
+- **`UserProgress`**: Tabla resolutiva (Muchos a Muchos) que enlaza `User` y `Lesson`, documentando si el reto ha sido superado y guardando el `codeSubmitted` para auditoría administrador.
 
 ## 5. Implementación y Tecnologías Clave
 
 ### 5.1. Backend (Symfony & PHP)
-Se ha seleccionado Symfony por su arquitectura modular basada en componentes y su robustez empresarial. La carga de datos inicial (Fixtures) asegura que cualquier profesor pueda desplegar el proyecto y probarlo inmediatamente sin configuraciones previas de la base de datos.
+Se ha seleccionado Symfony por su arquitectura modular basada en componentes y su robustez empresarial. La carga de datos inicial (Fixtures) asegura que cualquier Game Master pueda desplegar el proyecto y probarlo inmediatamente sin configuraciones previas de la base de datos.
 
 ### 5.2. Frontend (Tailwind CSS & Twig)
 Inicialmente conceptualizado con Bootstrap, el proyecto fue migrado exitosamente a **Tailwind CSS**. Esta migración ha permitido crear componentes modulares (`card-gamer`, `btn-neon-run`) en un archivo CSS central (`app.css`), aplicando directivas `@apply`. El resultado es una interfaz con fondos oscuros, neones dinámicos y sombras difuminadas que aumentan la inmersión del jugador.
 
 ### 5.3. Interacción "En Vivo" y Motor de Evaluación
-El corazón pedagógico del proyecto reside en `play.html.twig`. Mediante la manipulación del objeto `console` nativo de JavaScript, se interceptan las salidas por terminal del código introducido por el estudiante y se evalúan mediante la función constructora `new Function()`.
+El corazón pedagógico del proyecto reside en `play.html.twig`. Mediante la manipulación del objeto `console` nativo de JavaScript, se interceptan las salidas por terminal del código introducido por el jugador y se evalúan mediante la función constructora `new Function()`.
 Además, se aplican Expresiones Regulares (RegEx) para realizar análisis de código estático ligero, advirtiendo sobre malas prácticas (como el uso de `var`) antes de que el código sea ejecutado.
 
 ### 5.4. Aspectos Narrativos y Feedback
-Se ha desarrollado un Asistente Inteligente ("El Padre") que detecta la inactividad del alumno (45 segundos) y sus errores consecutivos. Tras 3 intentos fallidos de ejecución, el sistema interviene reproduciendo animaciones CSS tipo Glitch y mostrando mensajes de apoyo en la terminal web para reducir la frustración. Las cinemáticas de entrada emplean la `Web Audio API` para simular la telegrafía antigua.
+Se ha desarrollado un Asistente Inteligente ("El Padre") que detecta la inactividad del jugador (45 segundos) y sus errores consecutivos. Tras 3 intentos fallidos de ejecución, el sistema interviene reproduciendo animaciones CSS tipo Glitch y mostrando mensajes de apoyo en la terminal web para reducir la frustración. Las cinemáticas de entrada emplean la `Web Audio API` para simular la telegrafía antigua.
 
 ## 6. Pruebas y Validación
 
